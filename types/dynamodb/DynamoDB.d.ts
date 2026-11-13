@@ -1,9 +1,9 @@
-export interface Projection {
-    ProjectionType?: 'ALL' | 'KEYS_ONLY' | 'INCLUDE' | string | undefined;
-    NonKeyAttributes?: string[] | undefined;
+export interface Projection<T> {
+    ProjectionType?: "ALL" | "KEYS_ONLY" | "INCLUDE" | string;
+    NonKeyAttributes?: Array<keyof T>;
 }
 
-import * as stream from 'stream';
+import stream = require("stream");
 
 export type DynamoDB = any;
 
@@ -26,17 +26,17 @@ export type binaryType =
     | stream.Stream;
 
 interface StringSet {
-    type: 'String';
+    type: "String";
     values: string[];
 }
 
 interface NumberSet {
-    type: 'Number';
+    type: "Number";
     values: number[];
 }
 
 interface BinarySet {
-    type: 'Binary';
+    type: "Binary";
     values: binaryType[];
 }
 
@@ -45,11 +45,11 @@ export type DynamoDbSet = StringSet | NumberSet | BinarySet;
 export interface GetItemInput {
     TableName: string;
     Key: object;
-    AttributesToGet?: string[] | undefined;
-    ConsistentRead?: boolean | undefined;
-    ReturnConsumedCapacity?: string | undefined;
-    ProjectionExpression?: string | undefined;
-    ExpressionAttributeNames?: { [key: string]: string } | undefined;
+    AttributesToGet?: string[];
+    ConsistentRead?: boolean;
+    ReturnConsumedCapacity?: string;
+    ProjectionExpression?: string;
+    ExpressionAttributeNames?: { [key: string]: string };
 }
 
 export {};

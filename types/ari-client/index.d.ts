@@ -1,8 +1,3 @@
-// Type definitions for ari-client 2.2
-// Project: https://github.com/asterisk/node-ari-client
-// Definitions by: Dioris Moreno <https://github.com/dioris-moreno>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 /// <reference types="node" />
 
 /**
@@ -32,18 +27,26 @@ export interface Client extends Resource {
      *  Creates the WebSocket connection, subscribing to the given apps.
      *
      *  @param apps - Name or array of names of the applications to be started.
-     *  @param subscribeAll - Subscribe to all Asterisk events (true/false).
-     *  @param [callback] - The callback to be called after applications have started.
+     *  @param [subscribeAll] - Subscribe to all Asterisk events (true/false).
      */
-    start(apps: string | string[], subscribeAll: boolean, callback?: (err: Error, ...args: any[]) => void): void;
+    start(apps: string | string[], subscribeAll?: boolean): Promise<void>;
 
     /**
      *  Creates the WebSocket connection, subscribing to the given apps.
      *
      *  @param apps - Name or array of names of the applications to be started.
-     *  @param [callback] - The callback to be called after applications have started.
+     *  @param subscribeAll - Subscribe to all Asterisk events (true/false).
+     *  @param callback - The callback to be called after applications have started.
      */
-    start(apps: string | string[], callback?: (err: Error, ...args: any[]) => void): void;
+    start(apps: string | string[], subscribeAll: boolean, callback: (err: Error, ...args: any[]) => void): void;
+
+    /**
+     *  Creates the WebSocket connection, subscribing to the given apps.
+     *
+     *  @param apps - Name or array of names of the applications to be started.
+     *  @param callback - The callback to be called after applications have started.
+     */
+    start(apps: string | string[], callback: (err: Error, ...args: any[]) => void): void;
 
     /**
      *  Closes the WebSocket connection.
@@ -173,52 +176,61 @@ export interface IndexableObject {
     [key: string]: any;
 }
 /* Event Types */
-export type APILoadErrorEventType = 'APILoadError';
-export type EventsEventType = 'Events';
-export type MessageEventType = 'Message';
-export type MissingParamsEventType = 'MissingParams';
-export type EventEventType = 'Event';
-export type ContactInfoEventType = 'ContactInfo';
-export type PeerEventType = 'Peer';
-export type DeviceStateChangedEventType = 'DeviceStateChanged';
-export type PlaybackStartedEventType = 'PlaybackStarted';
-export type PlaybackContinuingEventType = 'PlaybackContinuing';
-export type PlaybackFinishedEventType = 'PlaybackFinished';
-export type RecordingStartedEventType = 'RecordingStarted';
-export type RecordingFinishedEventType = 'RecordingFinished';
-export type RecordingFailedEventType = 'RecordingFailed';
-export type ApplicationMoveFailedEventType = 'ApplicationMoveFailed';
-export type ApplicationReplacedEventType = 'ApplicationReplaced';
-export type BridgeCreatedEventType = 'BridgeCreated';
-export type BridgeDestroyedEventType = 'BridgeDestroyed';
-export type BridgeMergedEventType = 'BridgeMerged';
-export type BridgeVideoSourceChangedEventType = 'BridgeVideoSourceChanged';
-export type BridgeBlindTransferEventType = 'BridgeBlindTransfer';
-export type BridgeAttendedTransferEventType = 'BridgeAttendedTransfer';
-export type ChannelCreatedEventType = 'ChannelCreated';
-export type ChannelDestroyedEventType = 'ChannelDestroyed';
-export type ChannelEnteredBridgeEventType = 'ChannelEnteredBridge';
-export type ChannelLeftBridgeEventType = 'ChannelLeftBridge';
-export type ChannelStateChangeEventType = 'ChannelStateChange';
-export type ChannelDtmfReceivedEventType = 'ChannelDtmfReceived';
-export type ChannelDialplanEventType = 'ChannelDialplan';
-export type ChannelCallerIdEventType = 'ChannelCallerId';
-export type ChannelUsereventEventType = 'ChannelUserevent';
-export type ChannelHangupRequestEventType = 'ChannelHangupRequest';
-export type ChannelVarsetEventType = 'ChannelVarset';
-export type ChannelHoldEventType = 'ChannelHold';
-export type ChannelUnholdEventType = 'ChannelUnhold';
-export type ChannelTalkingStartedEventType = 'ChannelTalkingStarted';
-export type ChannelTalkingFinishedEventType = 'ChannelTalkingFinished';
-export type ContactStatusChangeEventType = 'ContactStatusChange';
-export type PeerStatusChangeEventType = 'PeerStatusChange';
-export type EndpointStateChangeEventType = 'EndpointStateChange';
-export type DialEventType = 'Dial';
-export type StasisEndEventType = 'StasisEnd';
-export type StasisStartEventType = 'StasisStart';
-export type TextMessageReceivedEventType = 'TextMessageReceived';
-export type ChannelConnectedLineEventType = 'ChannelConnectedLine';
+export type WebSocketConnectedEventType = "WebSocketConnected";
+export type WebSocketReconnectingEventType = "WebSocketReconnecting";
+export type WebSocketMaxRetriesEventType = "WebSocketMaxRetries";
+export type PongEventType = "pong";
+export type APILoadErrorEventType = "APILoadError";
+export type EventsEventType = "Events";
+export type MessageEventType = "Message";
+export type MissingParamsEventType = "MissingParams";
+export type EventEventType = "Event";
+export type ContactInfoEventType = "ContactInfo";
+export type PeerEventType = "Peer";
+export type DeviceStateChangedEventType = "DeviceStateChanged";
+export type PlaybackStartedEventType = "PlaybackStarted";
+export type PlaybackContinuingEventType = "PlaybackContinuing";
+export type PlaybackFinishedEventType = "PlaybackFinished";
+export type RecordingStartedEventType = "RecordingStarted";
+export type RecordingFinishedEventType = "RecordingFinished";
+export type RecordingFailedEventType = "RecordingFailed";
+export type ApplicationMoveFailedEventType = "ApplicationMoveFailed";
+export type ApplicationReplacedEventType = "ApplicationReplaced";
+export type BridgeCreatedEventType = "BridgeCreated";
+export type BridgeDestroyedEventType = "BridgeDestroyed";
+export type BridgeMergedEventType = "BridgeMerged";
+export type BridgeVideoSourceChangedEventType = "BridgeVideoSourceChanged";
+export type BridgeBlindTransferEventType = "BridgeBlindTransfer";
+export type BridgeAttendedTransferEventType = "BridgeAttendedTransfer";
+export type ChannelCreatedEventType = "ChannelCreated";
+export type ChannelDestroyedEventType = "ChannelDestroyed";
+export type ChannelEnteredBridgeEventType = "ChannelEnteredBridge";
+export type ChannelLeftBridgeEventType = "ChannelLeftBridge";
+export type ChannelStateChangeEventType = "ChannelStateChange";
+export type ChannelDtmfReceivedEventType = "ChannelDtmfReceived";
+export type ChannelDialplanEventType = "ChannelDialplan";
+export type ChannelCallerIdEventType = "ChannelCallerId";
+export type ChannelUsereventEventType = "ChannelUserevent";
+export type ChannelHangupRequestEventType = "ChannelHangupRequest";
+export type ChannelVarsetEventType = "ChannelVarset";
+export type ChannelHoldEventType = "ChannelHold";
+export type ChannelUnholdEventType = "ChannelUnhold";
+export type ChannelTalkingStartedEventType = "ChannelTalkingStarted";
+export type ChannelTalkingFinishedEventType = "ChannelTalkingFinished";
+export type ContactStatusChangeEventType = "ContactStatusChange";
+export type PeerStatusChangeEventType = "PeerStatusChange";
+export type EndpointStateChangeEventType = "EndpointStateChange";
+export type DialEventType = "Dial";
+export type StasisEndEventType = "StasisEnd";
+export type StasisStartEventType = "StasisStart";
+export type TextMessageReceivedEventType = "TextMessageReceived";
+export type ChannelConnectedLineEventType = "ChannelConnectedLine";
 export type AnyEventType =
+    | WebSocketConnectedEventType
+    | WebSocketReconnectingEventType
+    | WebSocketMaxRetriesEventType
+    | PongEventType
+    | APILoadErrorEventType
     | EventsEventType
     | MessageEventType
     | MissingParamsEventType
@@ -295,7 +307,12 @@ export interface Events {
      * @param [params.variables] - The "variables" key in the body object holds custom key/value pairs to add to the user event. Ex. { "variables": { "key": "value" } }.
      */
     userEvent(
-        params: { eventName: string; application: string; source?: string | string[] | undefined; variables?: Containers | undefined },
+        params: {
+            eventName: string;
+            application: string;
+            source?: string | string[] | undefined;
+            variables?: Containers | undefined;
+        },
         callback: (err: Error) => void,
     ): void;
 
@@ -338,9 +355,9 @@ export interface Event extends Message {
     application: string;
 
     /**
-     * Time at which this event was created.
+     * ISO 8601 date/time at which this event was created.
      */
-    timestamp: Date;
+    timestamp: string;
 }
 export interface ContactInfo {
     /**
@@ -893,6 +910,41 @@ export interface ChannelConnectedLine extends Event {
 }
 export interface Resource {
     /**
+     * The ARI client instance.
+     */
+    _client: Client;
+
+    /**
+     * Error emitted when WebSocket reconnection attempts exceeded MaxRetries.
+     */
+    // tslint:disable-next-line:unified-signatures
+    on(type: WebSocketMaxRetriesEventType, listener: (err: Error) => void): void;
+
+    /**
+     * Error emitted when the WebSocket is reconnecting.
+     */
+    // tslint:disable-next-line:unified-signatures
+    on(type: WebSocketReconnectingEventType, listener: (err: Error) => void): void;
+
+    /**
+     * Event emitted when the WebSocket is connected.
+     */
+    // tslint:disable-next-line:unified-signatures
+    on(type: WebSocketConnectedEventType, listener: () => void): void;
+
+    /**
+     * Event emitted when a WebSocket pong is received.
+     */
+    // tslint:disable-next-line:unified-signatures
+    on(type: PongEventType, listener: () => void): void;
+
+    /**
+     * Error event sent when connection to API fails.
+     */
+    // tslint:disable-next-line:unified-signatures
+    on(type: APILoadErrorEventType, listener: (err: Error) => void): void;
+
+    /**
      * Base type for errors and events.
      */
     on(event: MessageEventType, callback: (event: Message, instances: Message) => void): void;
@@ -1137,6 +1189,36 @@ export interface Resource {
      * Channel changed Connected Line.
      */
     on(event: ChannelConnectedLineEventType, callback: (event: ChannelConnectedLine, channel: Channel) => void): void;
+
+    /**
+     * Error emitted when WebSocket reconnection attempts exceeded MaxRetries.
+     */
+    // tslint:disable-next-line:unified-signatures
+    once(type: WebSocketMaxRetriesEventType, listener: (err: Error) => void): void;
+
+    /**
+     * Error emitted when the WebSocket is reconnecting.
+     */
+    // tslint:disable-next-line:unified-signatures
+    once(type: WebSocketReconnectingEventType, listener: (err: Error) => void): void;
+
+    /**
+     * Event emitted when the WebSocket is connected.
+     */
+    // tslint:disable-next-line:unified-signatures
+    once(type: WebSocketConnectedEventType, listener: () => void): void;
+
+    /**
+     * Event emitted when a WebSocket pong is received.
+     */
+    // tslint:disable-next-line:unified-signatures
+    once(type: PongEventType, listener: () => void): void;
+
+    /**
+     * Error event sent when connection to API fails.
+     */
+    // tslint:disable-next-line:unified-signatures
+    once(type: APILoadErrorEventType, listener: (err: Error) => void): void;
 
     /**
      * Base type for errors and events.
@@ -1392,6 +1474,36 @@ export interface Resource {
      * Channel changed Connected Line.
      */
     once(event: ChannelConnectedLineEventType, callback: (event: ChannelConnectedLine, channel: Channel) => void): void;
+
+    /**
+     * Error emitted when WebSocket reconnection attempts exceeded MaxRetries.
+     */
+    // tslint:disable-next-line:unified-signatures
+    addListener(type: WebSocketMaxRetriesEventType, listener: (err: Error) => void): void;
+
+    /**
+     * Error emitted when the WebSocket is reconnecting.
+     */
+    // tslint:disable-next-line:unified-signatures
+    addListener(type: WebSocketReconnectingEventType, listener: (err: Error) => void): void;
+
+    /**
+     * Event emitted when the WebSocket is connected.
+     */
+    // tslint:disable-next-line:unified-signatures
+    addListener(type: WebSocketConnectedEventType, listener: () => void): void;
+
+    /**
+     * Event emitted when a WebSocket pong is received.
+     */
+    // tslint:disable-next-line:unified-signatures
+    addListener(type: PongEventType, listener: () => void): void;
+
+    /**
+     * Error event sent when connection to API fails.
+     */
+    // tslint:disable-next-line:unified-signatures
+    addListener(type: APILoadErrorEventType, listener: (err: Error) => void): void;
 
     /**
      * Base type for errors and events.
@@ -1689,10 +1801,10 @@ export interface Resource {
     removeListener(event: AnyEventType, handler: (...args: any[]) => void): void;
 
     /**
-     *  Removes all listeners, or those of the specified event type.
+     *  Removes all listeners of the specified event type.
      *  @param [event] - The event type.
      */
-    removeAllListeners(event?: AnyEventType): void;
+    removeAllListeners(event: AnyEventType): void;
 }
 export interface Applications {
     /**
@@ -1906,7 +2018,10 @@ export interface Application extends Resource {
      *
      * @param [params.filter] - Specify which event types to allow/disallow.
      */
-    filter(params: { filter?: IndexableObject | undefined }, callback: (err: Error, application: Application) => void): void;
+    filter(
+        params: { filter?: IndexableObject | undefined },
+        callback: (err: Error, application: Application) => void,
+    ): void;
 
     /**
      * Filter application events types.
@@ -2011,7 +2126,10 @@ export interface Asterisk {
      *
      * @param [params.only] - Filter information returned.
      */
-    getInfo(params: { only?: string | string[] | undefined }, callback: (err: Error, asteriskinfo: AsteriskInfo) => void): void;
+    getInfo(
+        params: { only?: string | string[] | undefined },
+        callback: (err: Error, asteriskinfo: AsteriskInfo) => void,
+    ): void;
 
     /**
      * Gets Asterisk system information.
@@ -2271,14 +2389,14 @@ export interface ConfigInfo {
 }
 export interface StatusInfo {
     /**
-     * Time when Asterisk was started.
+     * ISO 8601 date/time when Asterisk was started.
      */
-    startup_time: Date;
+    startup_time: string;
 
     /**
-     * Time when Asterisk was last reloaded.
+     * ISO 8601 date/time when Asterisk was last reloaded.
      */
-    last_reload_time: Date;
+    last_reload_time: string;
 }
 export interface AsteriskInfo {
     /**
@@ -2419,7 +2537,9 @@ export interface Bridges {
      * @param [params.bridgeId] - Unique ID to give to the bridge being created.
      * @param [params.name] - Name to give to the bridge being created.
      */
-    create(params?: { type?: string | undefined; bridgeId?: string | undefined; name?: string | undefined }): Promise<Bridge>;
+    create(
+        params?: { type?: string | undefined; bridgeId?: string | undefined; name?: string | undefined },
+    ): Promise<Bridge>;
 
     /**
      * Create a new bridge or updates an existing one.
@@ -2484,7 +2604,13 @@ export interface Bridges {
      * @param [params.mute] - Mute audio from this channel, preventing it to pass through to the bridge.
      */
     addChannel(
-        params: { bridgeId: string; channel: string | string[]; role?: string | undefined; absorbDTMF?: boolean | undefined; mute?: boolean | undefined },
+        params: {
+            bridgeId: string;
+            channel: string | string[];
+            role?: string | undefined;
+            absorbDTMF?: boolean | undefined;
+            mute?: boolean | undefined;
+        },
         callback: (err: Error) => void,
     ): void;
 
@@ -2773,9 +2899,9 @@ export interface Bridge extends Resource {
     video_source_id?: string | undefined;
 
     /**
-     * Timestamp when bridge was created.
+     * ISO 8601 date/time when the bridge was created.
      */
-    creationtime: Date;
+    creationtime: string;
 
     /**
      * List all active bridges in Asterisk.
@@ -2794,7 +2920,10 @@ export interface Bridge extends Resource {
      * @param [params.type] - Comma separated list of bridge type attributes (mixing, holding, dtmf_events, proxy_media, video_sfu).
      * @param [params.name] - Name to give to the bridge being created.
      */
-    create(params: { type?: string | undefined; name?: string | undefined }, callback: (err: Error, bridge: Bridge) => void): void;
+    create(
+        params: { type?: string | undefined; name?: string | undefined },
+        callback: (err: Error, bridge: Bridge) => void,
+    ): void;
 
     /**
      * Create a new bridge.
@@ -2818,7 +2947,10 @@ export interface Bridge extends Resource {
      * @param [params.type] - Comma separated list of bridge type attributes (mixing, holding, dtmf_events, proxy_media, video_sfu) to set.
      * @param [params.name] - Set the name of the bridge.
      */
-    createWithId(params: { type?: string | undefined; name?: string | undefined }, callback: (err: Error, bridge: Bridge) => void): void;
+    createWithId(
+        params: { type?: string | undefined; name?: string | undefined },
+        callback: (err: Error, bridge: Bridge) => void,
+    ): void;
 
     /**
      * Create a new bridge or updates an existing one.
@@ -2866,7 +2998,12 @@ export interface Bridge extends Resource {
      * @param [params.mute] - Mute audio from this channel, preventing it to pass through to the bridge.
      */
     addChannel(
-        params: { channel: string | string[]; role?: string | undefined; absorbDTMF?: boolean | undefined; mute?: boolean | undefined },
+        params: {
+            channel: string | string[];
+            role?: string | undefined;
+            absorbDTMF?: boolean | undefined;
+            mute?: boolean | undefined;
+        },
         callback: (err: Error) => void,
     ): void;
 
@@ -2968,7 +3105,13 @@ export interface Bridge extends Resource {
      * @param [params.playbackId] - Playback Id.
      */
     play(
-        params: { media: string | string[]; lang?: string | undefined; offsetms?: number | undefined; skipms?: number | undefined; playbackId?: string | undefined },
+        params: {
+            media: string | string[];
+            lang?: string | undefined;
+            offsetms?: number | undefined;
+            skipms?: number | undefined;
+            playbackId?: string | undefined;
+        },
         callback: (err: Error, playback: Playback) => void,
     ): void;
 
@@ -3003,7 +3146,13 @@ export interface Bridge extends Resource {
      * @param [params.skipms] - Number of milliseconds to skip for forward/reverse operations.
      */
     playWithId(
-        params: { playbackId: string; media: string | string[]; lang?: string | undefined; offsetms?: number | undefined; skipms?: number | undefined },
+        params: {
+            playbackId: string;
+            media: string | string[];
+            lang?: string | undefined;
+            offsetms?: number | undefined;
+            skipms?: number | undefined;
+        },
         callback: (err: Error, playback: Playback) => void,
     ): void;
 
@@ -3335,7 +3484,13 @@ export interface Channels {
      * @param [params.label] - The label to continue to - will supersede priority if both are provided.
      */
     continueInDialplan(
-        params: { channelId: string; context?: string | undefined; extension?: string | undefined; priority?: number | undefined; label?: string | undefined },
+        params: {
+            channelId: string;
+            context?: string | undefined;
+            extension?: string | undefined;
+            priority?: number | undefined;
+            label?: string | undefined;
+        },
         callback: (err: Error) => void,
     ): void;
 
@@ -3363,7 +3518,10 @@ export interface Channels {
      * @param params.app - The channel will be passed to this Stasis application.
      * @param [params.appArgs] - The application arguments to pass to the Stasis application provided by app.
      */
-    move(params: { channelId: string; app: string; appArgs?: string | undefined }, callback: (err: Error) => void): void;
+    move(
+        params: { channelId: string; app: string; appArgs?: string | undefined },
+        callback: (err: Error) => void,
+    ): void;
 
     /**
      * Move the channel from one Stasis application to another.
@@ -3790,7 +3948,14 @@ export interface Channels {
      * @param [params.snoopId] - Unique ID to assign to snooping channel.
      */
     snoopChannel(
-        params: { channelId: string; spy?: string | undefined; whisper?: string | undefined; app: string; appArgs?: string | undefined; snoopId?: string | undefined },
+        params: {
+            channelId: string;
+            spy?: string | undefined;
+            whisper?: string | undefined;
+            app: string;
+            appArgs?: string | undefined;
+            snoopId?: string | undefined;
+        },
         callback: (err: Error, channel: Channel) => void,
     ): void;
 
@@ -3826,7 +3991,14 @@ export interface Channels {
      * @param [params.appArgs] - The application arguments to pass to the Stasis application.
      */
     snoopChannelWithId(
-        params: { channelId: string; snoopId: string; spy?: string | undefined; whisper?: string | undefined; app: string; appArgs?: string | undefined },
+        params: {
+            channelId: string;
+            snoopId: string;
+            spy?: string | undefined;
+            whisper?: string | undefined;
+            app: string;
+            appArgs?: string | undefined;
+        },
         callback: (err: Error, channel: Channel) => void,
     ): void;
 
@@ -3857,7 +4029,10 @@ export interface Channels {
      * @param [params.caller] - Channel ID of caller.
      * @param [params.timeout] - Dial timeout.
      */
-    dial(params: { channelId: string; caller?: string | undefined; timeout?: number | undefined }, callback: (err: Error) => void): void;
+    dial(
+        params: { channelId: string; caller?: string | undefined; timeout?: number | undefined },
+        callback: (err: Error) => void,
+    ): void;
 
     /**
      * Dial a created channel.
@@ -4144,6 +4319,11 @@ export interface Channel extends Resource {
     id: string;
 
     /**
+     * Protocol id from underlying channel driver (i.e. Call-ID for chan_pjsip; will be empty if not applicable or not implemented by driver).
+     */
+    protocol_id: string;
+
+    /**
      * Name of the channel (i.e. SIP/foo-0000a7e3).
      */
     name: string;
@@ -4174,9 +4354,9 @@ export interface Channel extends Resource {
     dialplan: DialplanCEP;
 
     /**
-     * Timestamp when channel was created.
+     * ISO 8601 date/time when the channel was created.
      */
-    creationtime: Date;
+    creationtime: string;
 
     /**
      * The default spoken language.
@@ -4431,7 +4611,12 @@ export interface Channel extends Resource {
      * @param [params.label] - The label to continue to - will supersede priority if both are provided.
      */
     continueInDialplan(
-        params: { context?: string | undefined; extension?: string | undefined; priority?: number | undefined; label?: string | undefined },
+        params: {
+            context?: string | undefined;
+            extension?: string | undefined;
+            priority?: number | undefined;
+            label?: string | undefined;
+        },
         callback: (err: Error) => void,
     ): void;
 
@@ -4525,7 +4710,13 @@ export interface Channel extends Resource {
      * @param [params.after] - Amount of time to wait after DTMF digits (specified in milliseconds) end.
      */
     sendDTMF(
-        params: { dtmf?: string | undefined; before?: number | undefined; between?: number | undefined; duration?: number | undefined; after?: number | undefined },
+        params: {
+            dtmf?: string | undefined;
+            before?: number | undefined;
+            between?: number | undefined;
+            duration?: number | undefined;
+            after?: number | undefined;
+        },
         callback: (err: Error) => void,
     ): void;
 
@@ -4678,7 +4869,13 @@ export interface Channel extends Resource {
      * @param [params.playbackId] - Playback ID.
      */
     play(
-        params: { media: string | string[]; lang?: string | undefined; offsetms?: number | undefined; skipms?: number | undefined; playbackId?: string | undefined },
+        params: {
+            media: string | string[];
+            lang?: string | undefined;
+            offsetms?: number | undefined;
+            skipms?: number | undefined;
+            playbackId?: string | undefined;
+        },
         playback: Playback,
         callback: (err: Error, playback: Playback) => void,
     ): void;
@@ -4695,7 +4892,13 @@ export interface Channel extends Resource {
      * @param [params.playbackId] - Playback ID.
      */
     play(
-        params: { media: string | string[]; lang?: string | undefined; offsetms?: number | undefined; skipms?: number | undefined; playbackId?: string | undefined },
+        params: {
+            media: string | string[];
+            lang?: string | undefined;
+            offsetms?: number | undefined;
+            skipms?: number | undefined;
+            playbackId?: string | undefined;
+        },
         playback: Playback,
     ): Promise<Playback>;
 
@@ -4711,7 +4914,13 @@ export interface Channel extends Resource {
      * @param [params.skipms] - Number of milliseconds to skip for forward/reverse operations.
      */
     playWithId(
-        params: { playbackId: string; media: string | string[]; lang?: string | undefined; offsetms?: number | undefined; skipms?: number | undefined },
+        params: {
+            playbackId: string;
+            media: string | string[];
+            lang?: string | undefined;
+            offsetms?: number | undefined;
+            skipms?: number | undefined;
+        },
         callback: (err: Error, playback: Playback) => void,
     ): void;
 
@@ -4826,7 +5035,13 @@ export interface Channel extends Resource {
      * @param [params.snoopId] - Unique ID to assign to snooping channel.
      */
     snoopChannel(
-        params: { spy?: string | undefined; whisper?: string | undefined; app: string; appArgs?: string | undefined; snoopId?: string | undefined },
+        params: {
+            spy?: string | undefined;
+            whisper?: string | undefined;
+            app: string;
+            appArgs?: string | undefined;
+            snoopId?: string | undefined;
+        },
         snoopChannel: Channel,
         callback: (err: Error, channel: Channel) => void,
     ): void;
@@ -4842,7 +5057,13 @@ export interface Channel extends Resource {
      * @param [params.snoopId] - Unique ID to assign to snooping channel.
      */
     snoopChannel(
-        params: { spy?: string | undefined; whisper?: string | undefined; app: string; appArgs?: string | undefined; snoopId?: string | undefined },
+        params: {
+            spy?: string | undefined;
+            whisper?: string | undefined;
+            app: string;
+            appArgs?: string | undefined;
+            snoopId?: string | undefined;
+        },
         snoopChannel: Channel,
     ): Promise<Channel>;
 
@@ -4857,7 +5078,13 @@ export interface Channel extends Resource {
      * @param [params.appArgs] - The application arguments to pass to the Stasis application.
      */
     snoopChannelWithId(
-        params: { snoopId: string; spy?: string | undefined; whisper?: string | undefined; app: string; appArgs?: string | undefined },
+        params: {
+            snoopId: string;
+            spy?: string | undefined;
+            whisper?: string | undefined;
+            app: string;
+            appArgs?: string | undefined;
+        },
         callback: (err: Error, channel: Channel) => void,
     ): void;
 
@@ -5107,7 +5334,9 @@ export interface Endpoints {
      * @param [params.variables] - The "variables" key in the body object holds technology specific key/value pairs to append to the message. These can be interpreted and used by the various
      * resource types; for example, pjsip and sip resource types will add the key/value pairs as SIP headers.
      */
-    sendMessage(params: { to: string; from: string; body?: string | undefined; variables?: Containers | undefined }): Promise<void>;
+    sendMessage(
+        params: { to: string; from: string; body?: string | undefined; variables?: Containers | undefined },
+    ): Promise<void>;
 
     /**
      * List available endoints for a given endpoint technology.
@@ -5160,7 +5389,13 @@ export interface Endpoints {
      * resource types; for example, pjsip and sip resource types will add the key/value pairs as SIP headers.
      */
     sendMessageToEndpoint(
-        params: { tech: string; resource: string; from: string; body?: string | undefined; variables?: Containers | undefined },
+        params: {
+            tech: string;
+            resource: string;
+            from: string;
+            body?: string | undefined;
+            variables?: Containers | undefined;
+        },
         callback: (err: Error) => void,
     ): void;
 
@@ -5236,7 +5471,9 @@ export interface Endpoint extends Resource {
      * @param [params.variables] - The "variables" key in the body object holds technology specific key/value pairs to append to the message. These can be interpreted and used by the various
      * resource types; for example, pjsip and sip resource types will add the key/value pairs as SIP headers.
      */
-    sendMessage(params: { to: string; from: string; body?: string | undefined; variables?: Containers | undefined }): Promise<void>;
+    sendMessage(
+        params: { to: string; from: string; body?: string | undefined; variables?: Containers | undefined },
+    ): Promise<void>;
 
     /**
      * List available endoints for a given endpoint technology.
@@ -5279,7 +5516,9 @@ export interface Endpoint extends Resource {
      * @param [params.variables] - The "variables" key in the body object holds technology specific key/value pairs to append to the message. These can be interpreted and used by the various
      * resource types; for example, pjsip and sip resource types will add the key/value pairs as SIP headers.
      */
-    sendMessageToEndpoint(params: { from: string; body?: string | undefined; variables?: Containers | undefined }): Promise<void>;
+    sendMessageToEndpoint(
+        params: { from: string; body?: string | undefined; variables?: Containers | undefined },
+    ): Promise<void>;
 }
 export interface TextMessage {
     /**
@@ -6033,7 +6272,10 @@ export interface Sounds {
      * @param [params.lang] - Lookup sound for a specific language.
      * @param [params.format] - Lookup sound in a specific format.
      */
-    list(params: { lang?: string | undefined; format?: string | undefined }, callback: (err: Error, sounds: Sound[]) => void): void;
+    list(
+        params: { lang?: string | undefined; format?: string | undefined },
+        callback: (err: Error, sounds: Sound[]) => void,
+    ): void;
 
     /**
      * List all sounds.
@@ -6095,7 +6337,10 @@ export interface Sound extends Resource {
      * @param [params.lang] - Lookup sound for a specific language.
      * @param [params.format] - Lookup sound in a specific format.
      */
-    list(params: { lang?: string | undefined; format?: string | undefined }, callback: (err: Error, sounds: Sound[]) => void): void;
+    list(
+        params: { lang?: string | undefined; format?: string | undefined },
+        callback: (err: Error, sounds: Sound[]) => void,
+    ): void;
 
     /**
      * List all sounds.

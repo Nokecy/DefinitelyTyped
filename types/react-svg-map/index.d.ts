@@ -1,8 +1,3 @@
-// Type definitions for react-svg-map 2.1
-// Project: https://github.com/VictorCazanave/react-svg-map
-// Definitions by: Nick Glazer <https://github.com/nickglazer>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 import * as React from "react";
 
 export interface Location {
@@ -45,4 +40,4 @@ export interface OnChangeMapProps extends BaseMapProps {
 
 export class CheckboxSVGMap extends React.Component<OnChangeMapProps> {}
 export class RadioSVGMap extends React.Component<OnChangeMapProps> {}
-export const SVGMap: React.SFC<SVGMapProps>;
+export const SVGMap: React.FC<SVGMapProps>;

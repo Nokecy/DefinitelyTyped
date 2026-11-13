@@ -1,10 +1,4 @@
-// Type definitions for webpack-bugsnag-plugins 1.4
-// Project: https://github.com/bugsnag/webpack-bugsnag-plugins#readme
-// Definitions by: Spencer Miskoviak <https://github.com/skovy>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 3.7
-
-import * as webpack from "webpack";
+import webpack = require("webpack");
 
 export interface SourceMapUploaderOptions {
     /**
@@ -111,6 +105,17 @@ export interface BuildReporterBuild {
      * this option if you aren’t able to set an `appVersion` in your notifier.
      */
     autoAssignRelease?: boolean | undefined;
+
+    /**
+     * Key value pairs containing any custom build information that provides useful metadata about the build. e.g. build configuration parameters, versions of dependencies, reason for the build etc.
+     * The keys and values must be strings. Nested objects aren't supported.
+     * e.g.
+     * {
+     * "buildServer": "build1",
+     * "buildReason": "Releasing JIRA-1234"
+     * }
+     */
+    metadata?: Record<string, string> | undefined;
 }
 
 export interface BuildReporterOptions {

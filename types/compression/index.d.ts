@@ -1,12 +1,5 @@
-// Type definitions for compression 1.7
-// Project: https://github.com/expressjs/compression
-// Definitions by: Santi Albo <https://github.com/santialbo>
-//                 Rob van der Burgt <https://github.com/rburgt>
-//                 Neil Bryson Cargamento <https://github.com/neilbryson>
-//                 Piotr Błażejewicz <https://github.com/peterblazejewicz>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
-import express = require('express');
+import express = require("express");
+import * as zlib from "zlib";
 
 // This module adds a res.flush() method to force the partially-compressed response to be flushed to the client.
 
@@ -71,7 +64,7 @@ declare namespace compression {
     interface CompressionOptions {
         /**
          * @default zlib.constants.Z_DEFAULT_CHUNK or 16384
-         * @see {@link http://nodejs.org/api/zlib.html#zlib_memory_usage_tuning| Node.js documentation}
+         * @see {@link https://nodejs.org/api/zlib.html#zlib_memory_usage_tuning| Node.js documentation}
          * @see {@link https://github.com/expressjs/compression#chunksize|chunkSize documentation}
          */
         chunkSize?: number | undefined;
@@ -88,6 +81,17 @@ declare namespace compression {
          * @see {@link https://www.npmjs.com/package/compressible|compressible module}
          */
         filter?: CompressionFilter | undefined;
+
+        /**
+         * Options for brotli compression.
+         */
+        brotli?: zlib.BrotliOptions | undefined;
+
+        /**
+         * This is the default encoding to use when the client does not specify an encoding in the request's Accept-Encoding header.
+         * @default 'identity'
+         */
+        enforceEncoding?: string | undefined;
 
         /**
          * The level of zlib compression to apply to responses. A higher level will result in better compression, but
@@ -121,7 +125,7 @@ declare namespace compression {
          * the range of `1` (minimum level) and `9` (maximum level).
          *
          * @default zlib.constants.DEFAULT_MEMLEVEL or 8
-         * @see {@link http://nodejs.org/api/zlib.html#zlib_memory_usage_tuning|Node.js documentation}
+         * @see {@link https://nodejs.org/api/zlib.html#zlib_memory_usage_tuning|Node.js documentation}
          * @see {@link https://github.com/expressjs/compression#memlevel|`memLevel` documentation}
          */
         memLevel?: number | undefined;
@@ -159,7 +163,7 @@ declare namespace compression {
 
         /**
          * @default zlib.constants.Z_DEFAULT_WINDOWBITS or 15.
-         * @see {@link http://nodejs.org/api/zlib.html#zlib_memory_usage_tuning|Node.js documentation}
+         * @see {@link https://nodejs.org/api/zlib.html#zlib_memory_usage_tuning|Node.js documentation}
          */
         windowBits?: number | undefined;
         /**

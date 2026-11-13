@@ -1,11 +1,4 @@
-// Type definitions for react-image-gallery 1.0
-// Project: https://github.com/xiaolin/react-image-gallery
-// Definitions by: Adam Webb <https://github.com/adamwpc>
-//                 William Tio <https://github.com/WToa>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 3.4
-
-import * as React from 'react';
+import * as React from "react";
 
 export type ReactImageGalleryImageSet = ReadonlyArray<{
     srcSet: string;
@@ -43,11 +36,13 @@ export interface ReactImageGalleryItem {
     imageSet?: ReactImageGalleryImageSet | undefined;
     srcSet?: string | undefined;
     sizes?: string | undefined;
+    loading?: "lazy" | "eager" | undefined;
+    thumbnailLoading?: "lazy" | "eager" | undefined;
 }
 
 export interface ReactImageGalleryProps {
     flickThreshold?: number | undefined;
-    items: ReadonlyArray<ReactImageGalleryItem>;
+    items: readonly ReactImageGalleryItem[];
     showNav?: boolean | undefined;
     autoPlay?: boolean | undefined;
     lazyLoad?: boolean | undefined;
@@ -64,7 +59,7 @@ export interface ReactImageGalleryProps {
     preventDefaultTouchmoveEvent?: boolean | undefined;
     onErrorImageURL?: string | undefined;
     indexSeparator?: string | undefined;
-    thumbnailPosition?: 'top' | 'right' | 'bottom' | 'left' | undefined;
+    thumbnailPosition?: "top" | "right" | "bottom" | "left" | undefined;
     startIndex?: number | undefined;
     slideDuration?: number | undefined;
     slideInterval?: number | undefined;
@@ -76,21 +71,27 @@ export interface ReactImageGalleryProps {
     onScreenChange?: ((fullScreen: boolean) => void) | undefined;
     onPause?: ((currentIndex: number) => void) | undefined;
     onPlay?: ((currentIndex: number) => void) | undefined;
-    onClick?: ((event: React.MouseEventHandler<HTMLDivElement>) => void) | undefined;
-    onImageLoad?: ((event: React.ReactEventHandler<HTMLImageElement>) => void) | undefined;
-    onImageError?: ((event: React.ReactEventHandler<HTMLImageElement>) => void) | undefined;
-    onTouchMove?: ((event: React.TouchEventHandler<HTMLDivElement>) => void) | undefined;
-    onTouchEnd?: ((event: React.TouchEventHandler<HTMLDivElement>) => void) | undefined;
-    onTouchStart?: ((event: React.TouchEventHandler<HTMLDivElement>) => void) | undefined;
-    onMouseOver?: ((event: React.MouseEventHandler<HTMLDivElement>) => void) | undefined;
-    onMouseLeave?: ((event: React.MouseEventHandler<HTMLDivElement>) => void) | undefined;
-    onThumbnailError?: ((event: React.ReactEventHandler<HTMLImageElement>) => void) | undefined;
-    onThumbnailClick?: ((event: React.MouseEventHandler<HTMLAnchorElement>, index: number) => void) | undefined;
+    onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
+    onImageLoad?: React.ReactEventHandler<HTMLImageElement> | undefined;
+    onImageError?: React.ReactEventHandler<HTMLImageElement> | undefined;
+    onTouchMove?: React.TouchEventHandler<HTMLDivElement> | undefined;
+    onTouchEnd?: React.TouchEventHandler<HTMLDivElement> | undefined;
+    onTouchStart?: React.TouchEventHandler<HTMLDivElement> | undefined;
+    onMouseOver?: React.MouseEventHandler<HTMLDivElement> | undefined;
+    onMouseLeave?: React.MouseEventHandler<HTMLDivElement> | undefined;
+    onThumbnailError?: React.ReactEventHandler<HTMLImageElement> | undefined;
+    onThumbnailClick?: ((event: React.MouseEvent<HTMLAnchorElement>, index: number) => void) | undefined;
     renderCustomControls?: (() => React.ReactNode) | undefined;
     renderLeftNav?: ((onClick: React.MouseEventHandler<HTMLElement>, disabled: boolean) => React.ReactNode) | undefined;
-    renderRightNav?: ((onClick: React.MouseEventHandler<HTMLElement>, disabled: boolean) => React.ReactNode) | undefined;
-    renderPlayPauseButton?: ((onClick: React.MouseEventHandler<HTMLElement>, isPlaying: boolean) => React.ReactNode) | undefined;
-    renderFullscreenButton?: ((onClick: React.MouseEventHandler<HTMLElement>, isFullscreen: boolean) => React.ReactNode) | undefined;
+    renderRightNav?:
+        | ((onClick: React.MouseEventHandler<HTMLElement>, disabled: boolean) => React.ReactNode)
+        | undefined;
+    renderPlayPauseButton?:
+        | ((onClick: React.MouseEventHandler<HTMLElement>, isPlaying: boolean) => React.ReactNode)
+        | undefined;
+    renderFullscreenButton?:
+        | ((onClick: React.MouseEventHandler<HTMLElement>, isFullscreen: boolean) => React.ReactNode)
+        | undefined;
     renderItem?: ((item: ReactImageGalleryItem) => React.ReactNode) | undefined;
     renderThumbInner?: ((item: ReactImageGalleryItem) => React.ReactNode) | undefined;
     stopPropagation?: boolean | undefined;

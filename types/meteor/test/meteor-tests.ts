@@ -14,8 +14,7 @@ import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 import { Tracker } from 'meteor/tracker';
-import { Template } from 'meteor/templating';
-import { Blaze } from 'meteor/blaze';
+import { Template, TemplateStaticTyped } from 'meteor/templating';
 import { Session } from 'meteor/session';
 import { HTTP } from 'meteor/http';
 import { ReactiveDict } from 'meteor/reactive-dict';
@@ -32,6 +31,15 @@ declare module 'meteor/meteor' {
         interface User {
             // One of the tests assigns a new property to the user so it has to be typed
             dexterity?: number | undefined;
+        }
+        interface UserProfile {
+            name?: string | undefined;
+        }
+
+        interface UserServices {
+            google?: {
+                email: string;
+            }
         }
     }
 }
@@ -80,6 +88,12 @@ namespace MeteorTests {
                 .aggregate([{ $group: { _id: null, names: { $addToSet: '$name' } } }])
                 .toArray()
                 .then();
+
+            Meteor.deferrable(
+                () => console.log('This is deferred until after startup.'),
+                {on: ['development', 'test']},
+            )
+
         });
     }
 
@@ -130,6 +144,8 @@ namespace MeteorTests {
         //  self.added("counts", roomId, {count: count});
         self.ready();
 
+        self.unblock();
+
         self.onStop(function () {
             handle.stop();
         });
@@ -139,6 +155,15 @@ namespace MeteorTests {
 
     Tracker.autorun(function () {
         Meteor.subscribe('counts-by-room', Session.get('roomId'));
+    });
+
+    // Async publish function
+    Meteor.publish('userData', async function (userId: unknown) {
+        check(userId, String);
+        const user = await Meteor.users.findOneAsync(userId);
+        if (user) {
+            return Meteor.users.find(userId, { fields: { profile: 1 } });
+        }
     });
 
     // Checking status
@@ -209,6 +234,26 @@ namespace MeteorTests {
      */
     Meteor.call('foo', 1, 2, function (error: any, result: any) {});
     var result = Meteor.call('foo', 1, 2);
+
+    (async function() {
+        var result = await Meteor.callAsync('foo', 1, 2);
+    })();
+
+    /**
+     * From Methods, Meteor.apply section
+     */
+    Meteor.apply('foo', []);
+    Meteor.apply('foo', [1, 2]);
+    Meteor.apply('foo', [1, 2], {});
+    Meteor.apply('foo', [1, 2], {
+        wait: true,
+        onResultReceived(error: any, result: any) {},
+        noRetry: true, // #56828
+        throwStubExceptions: false,
+        returnStubValue: true,
+    });
+    Meteor.apply('foo', [1, 2], {}, function (error: any, result: any) {});
+    var result = Meteor.apply('foo', [1, 2], {});
 
     /**
      * From Collections, Mongo.Collection section
@@ -359,6 +404,7 @@ namespace MeteorTests {
         if (Meteor.isServer) {
             Logs.remove({});
             Players.remove({ karma: { $lt: -2 } });
+            Meteor.defer(() => console.log('Old low-karma players removed from the Players collection.'));
         }
     });
 
@@ -402,6 +448,12 @@ namespace MeteorTests {
         },
         fetch: ['locked'], // no need to fetch 'owner'
     });
+
+    /**
+     * From Collections, createIndex section
+     */
+
+    Posts.createIndex({ title: 1 });
 
     /**
      * From Collections, cursor.forEach section
@@ -453,7 +505,7 @@ namespace MeteorTests {
     interface CommentsDAO {
         text: string;
         authorId: string;
-        inlineLinks: { objectType: InlineObjectType; objectId: string; objectUrl: string }[];
+        inlineLinks: Array<{ objectType: InlineObjectType; objectId: string; objectUrl: string }>;
         tags: string[];
         viewNumber: number;
         private: boolean;
@@ -506,6 +558,18 @@ namespace MeteorTests {
     Comments.update({ viewNumber: { $exists: false } }, { $set: { viewNumber: 0 } });
     Comments.update({ private: true }, { $unset: { tags: true } });
 
+    for (const comment of Comments.find({})) {
+        // $ExpectType CommentsDAO
+        comment;
+    }
+
+    (async function() {
+        for await (const comment of Comments.find({})) {
+            // $ExpectType CommentsDAO
+            comment;
+        }
+    })();
+
     /**
      * From Sessions, Session.set section
      */
@@ -550,7 +614,7 @@ namespace MeteorTests {
     Meteor.publish(
         null,
         function () {
-            return 3;
+            return;
         },
         { is_auto: true },
     );
@@ -573,6 +637,10 @@ namespace MeteorTests {
         },
     );
 
+    Accounts.loggingIn(); // $ExpectType boolean
+    Accounts.loggingOut(); // $ExpectType boolean
+
+    Meteor.loggingIn(); // $ExpectType boolean
     Meteor.loggingOut(); // $ExpectType boolean
 
     Meteor.user();
@@ -586,6 +654,61 @@ namespace MeteorTests {
     Accounts.user({ fields: {} });
     Accounts.user({ fields: { _id: 1 } });
     Accounts.user({ fields: { profile: 0 } });
+
+    (async () => {
+        await Meteor.userAsync();
+        await Meteor.userAsync({});
+        await Meteor.userAsync({ fields: {} });
+        await Meteor.userAsync({ fields: { _id: 1 } });
+        await Meteor.userAsync({ fields: { profile: 0 } });
+
+        await Accounts.userAsync();
+        await Accounts.userAsync({});
+        await Accounts.userAsync({ fields: {} });
+        await Accounts.userAsync({ fields: { _id: 1 } });
+        await Accounts.userAsync({ fields: { profile: 0 } });
+    })();
+
+    /**
+     * Fixes this discussion https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/55173
+     */
+    // @ts-expect-error
+    Accounts.sendEnrollmentEmail();
+    Accounts.sendEnrollmentEmail('userId');
+    Accounts.sendEnrollmentEmail('userId', 'email');
+    Accounts.sendEnrollmentEmail('userId', undefined, {});
+    Accounts.sendEnrollmentEmail('userId', undefined, undefined, {});
+    Accounts.sendEnrollmentEmail('userId', 'email', {}, {});
+
+    // @ts-expect-error
+    Accounts.sendResetPasswordEmail();
+    Accounts.sendResetPasswordEmail('userId');
+    Accounts.sendResetPasswordEmail('userId', 'email');
+    Accounts.sendResetPasswordEmail('userId', undefined, {});
+    Accounts.sendResetPasswordEmail('userId', undefined, undefined, {});
+    Accounts.sendResetPasswordEmail('userId', 'email', {}, {});
+
+    // @ts-expect-error
+    Accounts.sendVerificationEmail();
+    Accounts.sendVerificationEmail('userId');
+    Accounts.sendVerificationEmail('userId', 'email');
+    Accounts.sendVerificationEmail('userId', undefined, {});
+    Accounts.sendVerificationEmail('userId', undefined, undefined, {});
+    Accounts.sendVerificationEmail('userId', 'email', {}, {});
+
+    // @ts-expect-error
+    Accounts.findUserByEmail();
+    Accounts.findUserByEmail('email'); // $ExpectType User | null | undefined
+    Accounts.findUserByEmail('email', {}); // $ExpectType User | null | undefined
+    Accounts.findUserByEmail('email', { fields: undefined }); // $ExpectType User | null | undefined
+    Accounts.findUserByEmail('email', { fields: {} }); // $ExpectType User | null | undefined
+
+    // @ts-expect-error
+    Accounts.findUserByUsername();
+    Accounts.findUserByUsername('email'); // $ExpectType User | null | undefined
+    Accounts.findUserByUsername('email', {}); // $ExpectType User | null | undefined
+    Accounts.findUserByUsername('email', { fields: undefined }); // $ExpectType User | null | undefined
+    Accounts.findUserByUsername('email', { fields: {} }); // $ExpectType User | null | undefined
 
     /**
      * From Accounts, Accounts.ui.config section
@@ -632,7 +755,7 @@ namespace MeteorTests {
     Accounts.emailTemplates.siteName = 'AwesomeSite';
     Accounts.emailTemplates.from = 'AwesomeSite Admin <accounts@example.com>';
     Accounts.emailTemplates.enrollAccount.subject = function (user) {
-        return 'Welcome to Awesome Town, ' + user.profile.name;
+        return 'Welcome to Awesome Town, ' + user.profile?.name;
     };
     Accounts.emailTemplates.enrollAccount.text = function (user: any, url: string) {
         return (
@@ -673,8 +796,78 @@ namespace MeteorTests {
     var userId = instance.data.userId;
 
     var data = Template.currentData();
-    var data = Template.parentData(1);
+    var data2 = Template.parentData();
+    var data3 = Template.parentData(2);
     var body = Template.body;
+
+    const Template2 = Template as TemplateStaticTyped<
+        'newTemplate2',
+        { foo: string },
+        {
+            state: ReactiveDict<{ bar: number }>;
+            getFooBar(): string;
+        }
+    >;
+
+    const newTemplate2 = Template2.newTemplate2;
+
+    newTemplate2.helpers({
+        helperName: function () {
+            // $ExpectType string
+            Template2.currentData().foo;
+
+            // $ExpectType string
+            Template2.instance().getFooBar();
+        },
+    });
+
+    newTemplate2.onCreated(function () {
+        this.state.clear();
+        this.state = new ReactiveDict();
+        this.getFooBar = () => {
+            // $ExpectType string
+            this.data.foo;
+
+            // $ExpectType number | undefined
+            this.state.get('bar');
+
+            return this.data.foo + this.state.get('bar');
+        };
+
+        this.autorun(() => {
+            var dataContext = Template2.currentData();
+
+            // $ExpectType string
+            dataContext.foo;
+
+            this.subscribe('comments', dataContext.foo);
+        });
+    });
+
+    newTemplate2.rendered = function () {};
+
+    newTemplate2.events({
+        'click .something'(_event, template) {
+            const a = template.state.get('bar');
+            // $ExpectType number | undefined
+            a;
+
+            // $ExpectType string
+            template.getFooBar();
+        },
+    });
+
+    const Template3 = Template as TemplateStaticTyped<'newTemplate3', string>;
+
+    const Template4 = Template as TemplateStaticTyped<'newTemplate4', () => number>;
+
+    Template4.newTemplate4.events({
+        test: (_event, instance) => {
+            instance.data(); // $ExpectType number
+        },
+    });
+
+    const Template5 = Template as TemplateStaticTyped<'newTemplate5'>;
 
     /**
      * From Match section
@@ -745,6 +938,12 @@ namespace MeteorTests {
 
     // Outside an object
     check(undefined, Match.Optional('test')); // OK
+
+    var buffer: unknown;
+
+    check(buffer, Match.Where(EJSON.isBinary));
+    // $ExpectType Uint8Array || Uint8Array<ArrayBufferLike>
+    buffer;
 
     /**
      * From Deps, Tracker.autorun section
@@ -858,20 +1057,24 @@ namespace MeteorTests {
 
     var reactiveDict2 = new ReactiveDict<{ foo: string }>();
     reactiveDict2.set({ foo: 'bar' });
-    reactiveDict2.set('foo2', 'bar'); // $ExpectError
+    // @ts-expect-error
+    reactiveDict2.set('foo1', 'bar');
 
     var reactiveDict3 = new ReactiveDict('reactive-dict-3');
     var reactiveDict4 = new ReactiveDict('reactive-dict-4', { foo: 'bar' });
-    var reactiveDict5 = new ReactiveDict(undefined, { foo: 'bar' });
+    var reactiveDict5 = new ReactiveDict(undefined, { foo: 'bar', foo2: 'bar' });
 
     reactiveDict5.setDefault('foo', 'bar');
     reactiveDict5.setDefault({ foo: 'bar' });
 
     reactiveDict5.set('foo', 'bar');
     reactiveDict5.set({ foo: 'bar' });
+    reactiveDict5.set({ foo: 'bar', foo2: 'bar' });
 
-    reactiveDict5.set('foo2', 'bar'); // $ExpectError
-    reactiveDict5.set('foo', 2); // $ExpectError
+    // @ts-expect-error
+    reactiveDict5.set('foo1', 'bar');
+    // @ts-expect-error
+    reactiveDict5.set('foo', 2);
 
     reactiveDict5.get('foo') === 'bar';
 
@@ -912,13 +1115,13 @@ namespace MeteorTests {
     Accounts.emailTemplates.headers = { asdf: 'asdf', qwer: 'qwer' };
 
     Accounts.emailTemplates.enrollAccount.subject = function (user: Meteor.User) {
-        return 'Welcome to Awesome Town, ' + user.profile.name;
+        return 'Welcome to Awesome Town, ' + user.profile?.name;
     };
     Accounts.emailTemplates.enrollAccount.html = function (user: Meteor.User, url: string) {
         return '<h1>Some html here</h1>';
     };
     Accounts.emailTemplates.enrollAccount.from = function (user: Meteor.User) {
-        return 'asdf@asdf.com';
+        return user.services?.google?.email || 'asdf@asdf.com';
     };
     Accounts.emailTemplates.enrollAccount.text = function (user: Meteor.User, url: string) {
         return (
@@ -944,14 +1147,14 @@ namespace MeteorTests {
         Accounts.registerLoginHandler('impersonate', (options: { targetUserId: string }) => {
             const currentUser = Meteor.userId();
             if (!currentUser) {
-                return { error: 'No user was logged in' };
+                return { error: new Error('No user was logged in') };
             }
 
             const isSuperUser = (userId: string) => true;
 
             if (!isSuperUser(currentUser)) {
                 const errMsg = `User ${currentUser} tried to impersonate but is not allowed`;
-                return { error: errMsg };
+                return { error: new Error(errMsg) };
             }
             // By returning an object with userId, the session will now be logged in as that user
             return { userId: options.targetUserId };
@@ -1004,14 +1207,30 @@ namespace MeteorTests {
 
     // Covers https://github.com/meteor-typings/meteor/issues/18
     if (Meteor.isDevelopment) {
-        Rooms._dropIndex({ field: 1 });
+        Rooms._dropIndex('indexName');
     }
+
+    Meteor.deferDev(() => {
+        console.log('This is a development-only deferred function.');
+    });
+
+    Meteor.deferProd(() => {
+        console.log('This is a production-only deferred function.');
+    });
+
+    (async function() {
+        await Rooms.dropIndexAsync('indexName');
+    })();
 
     // Covers https://github.com/meteor-typings/meteor/issues/20
     Rooms.find().count(true);
 
     // Covers https://github.com/meteor-typings/meteor/issues/21
     if (Meteor.isTest) {
+        // do something
+    }
+
+    if (Meteor.isAppTest) {
         // do something
     }
 
@@ -1027,6 +1246,67 @@ namespace MeteorTests {
     const collectionWithoutConnection = new Mongo.Collection<MonkeyDAO>('monkey', {
         connection: null,
     });
+
+    // hot-module-replacement
+    if (module.hot) {
+        module.hot.accept();
+    }
+
+    const computation = Tracker.autorun(() => null);
+    if (module.hot) {
+        module.hot.dispose(() => {
+            computation.stop();
+        });
+    }
+
+    let color = 'blue';
+    if (module.hot) {
+        if (module.hot.data) {
+            color = (module.hot.data as any).color;
+        }
+
+        module.hot.dispose(data => {
+            (data as any).color = color;
+        });
+    }
+
+    function canAcceptUpdates(module: NodeJS.Module) {
+        return true;
+    }
+    if (module.hot) {
+        module.hot.onRequire<{
+            importedBy: string,
+            previouslyEvaluated: boolean,
+        }>({
+            // requiredModule is the same object available in the
+            // required module as `module`, including access to `module.hot`
+            // and `module.exports`
+            //
+            // parentId is a string with the path of the module that
+            // imported requiredModule.
+            before(requiredModule, parentId) {
+                // Anything returned here is available to the
+                // after callback as the data parameter.
+                return {
+                    importedBy: parentId,
+                    previouslyEvaluated: !requiredModule.loaded
+                }
+            },
+            after(requiredModule, data) {
+                if (!data.previouslyEvaluated) {
+                    console.log(`Finished evaluating ${requiredModule.id}`);
+                    console.log(`It was imported by ${data.importedBy}`);
+                    console.log(`Its exports are ${requiredModule.exports}`);
+                }
+
+                // canAcceptUpdates would look at the exports, and maybe the imports
+                // to check if this module can safely be updated with HMR.
+                if (requiredModule.hot && canAcceptUpdates(requiredModule)) {
+                    requiredModule.hot.accept();
+                }
+            }
+        });
+    }
 } // End of namespace
 
 // absoluteUrl
@@ -1039,7 +1319,7 @@ Meteor.absoluteUrl.defaultOptions = {
 Random.choice([1, 2, 3]); // $ExpectType number | undefined
 Random.choice('String'); // $ExpectType string
 
-EJSON.newBinary(5); // $ExpectType Uint8Array
+EJSON.newBinary(5); // $ExpectType Uint8Array || Uint8Array<ArrayBufferLike>
 
 // Connection
 Meteor.onConnection(connection => {

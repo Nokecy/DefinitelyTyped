@@ -1,16 +1,12 @@
-/**
- * Namespace: browser.extensionTypes
- * Generated from Mozilla sources. Do not manually edit!
- *
- * The <code>browser.extensionTypes</code> API contains type declarations for WebExtensions.
- *
- * Comments found in source JSON schema files:
- * Copyright 2014 The Chromium Authors. All rights reserved.
- * Use of this source code is governed by a BSD-style license that can be
- * found in the LICENSE file.
- */
+//////////////////////////////////////////////////////
+// BEWARE: DO NOT EDIT MANUALLY! Changes will be lost!
+//////////////////////////////////////////////////////
+
 import { Manifest } from "./manifest";
 
+/**
+ * Namespace: browser.extensionTypes
+ */
 export namespace ExtensionTypes {
     /**
      * The format of an image.
@@ -46,12 +42,24 @@ export namespace ExtensionTypes {
          * Optional.
          */
         scale?: number;
+
+        /**
+         * If true, temporarily resets the scroll position of the document to 0. Only takes effect if rect is also specified.
+         * Optional.
+         */
+        resetScrollPosition?: boolean;
     }
 
     /**
      * The soonest that the JavaScript or CSS will be injected into the tab.
      */
     type RunAt = "document_start" | "document_end" | "document_idle";
+
+    /**
+     * The JavaScript world for a script to execute within. <code>ISOLATED</code> is the default execution environment of
+     * content scripts, <code>MAIN</code> is the web page's execution environment.
+     */
+    type ExecutionWorld = "ISOLATED" | "MAIN";
 
     /**
      * The origin of the CSS to inject, this affects the cascading order (priority) of the stylesheet.

@@ -1,6 +1,6 @@
 /// <reference types="react" />
-import * as React from 'react';
-import { Component } from 'react';
+import * as React from "react";
+import { Component } from "react";
 /**
  * Slider component.
  * http://foundation.zurb.com/sites/docs/slider.html
@@ -8,7 +8,7 @@ import { Component } from 'react';
 export declare class Slider extends Component<SliderProps, SliderState> {
     constructor();
     componentWillMount(): void;
-    render(): JSX.Element;
+    render(): React.JSX.Element;
 }
 export interface SliderProps extends React.HTMLAttributes<HTMLDivElement>, SliderCommonProps {
     initialStart?: number | undefined;
@@ -25,7 +25,7 @@ export interface SliderState {
 export declare class TwoHandleSlider extends Component<TwoHandleSliderProps, TwoHandleSliderState> {
     constructor();
     componentWillMount(): void;
-    render(): JSX.Element;
+    render(): React.JSX.Element;
 }
 export interface TwoHandleSliderProps extends React.HTMLAttributes<HTMLDivElement>, SliderCommonProps {
     initialStart?: number | undefined;
@@ -44,7 +44,7 @@ export interface TwoHandleSliderState {
  * @param {Object} props
  * @returns {XML}
  */
-export declare const SliderHandle: React.StatelessComponent<SliderHandleProps>;
+export declare const SliderHandle: React.FunctionComponent<SliderHandleProps>;
 export interface SliderHandleProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 export interface SliderFillProps {
@@ -56,7 +56,7 @@ export interface SliderFillProps {
  * @param {Object} props
  * @returns {XML}
  */
-export declare const SliderFill: React.StatelessComponent<SliderFillProps>;
+export declare const SliderFill: React.FunctionComponent<SliderFillProps>;
 export interface SliderCommonProps {
     className?: string | undefined;
     isVertical?: boolean | undefined;

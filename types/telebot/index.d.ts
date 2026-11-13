@@ -1,9 +1,3 @@
-// Type definitions for telebot 1.2
-// Project: https://github.com/mullwar/telebot
-// Definitions by: Simone Mariotti <https://github.com/mariotsi>
-//                 Martin Badin <https://github.com/martin-badin>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 /// <reference types="node" />
 export = telebot;
 declare namespace telebot {
@@ -84,7 +78,7 @@ declare class telebot {
         offset: number,
         limit: number,
         timeout: number,
-        allowed_updates: string | string[]
+        allowed_updates: string | string[],
     ): void;
 
     receiveUpdates(updateList: any[]): Promise<any>;
@@ -100,13 +94,13 @@ declare class telebot {
     on(
         types: string | string[] | RegExp,
         fn: telebot.genericCb,
-        opt?: any
+        opt?: any,
     ): boolean;
 
     event(
         types: string | string[],
         data: any,
-        self?: any
+        self?: any,
     ): Promise<any>;
 
     cleanEvent(type: string): boolean;
@@ -133,9 +127,9 @@ declare class telebot {
     answerList(id: string, opt?: any): telebot.AnswerList;
 
     // Telegram API
-    getMe(): any;
+    getMe(): Promise<any>;
 
-    answerQuery(...param: any[]): boolean;
+    answerQuery(...param: any[]): Promise<boolean>;
 
     sendMessage(
         chat_id: number | string,
@@ -146,20 +140,20 @@ declare class telebot {
             replyMarkup?: any;
             notification?: boolean | undefined;
             webPreview?: boolean | undefined;
-        }
-    ): any;
+        },
+    ): Promise<any>;
 
     forwardMessage(
         chat_id: number | string,
         from_chat_id: number | string,
         message_id: number,
-        opt?: { notification?: boolean | undefined }
-    ): any;
+        opt?: { notification?: boolean | undefined },
+    ): Promise<any>;
 
     deleteMessage(
         chat_id: number | string,
-        from_message_id: number
-    ): boolean;
+        from_message_id: number,
+    ): Promise<boolean>;
 
     sendPhoto(
         chat_id: number | string,
@@ -171,8 +165,8 @@ declare class telebot {
             replyToMessage?: number | undefined;
             replyMarkup?: any;
             notification?: boolean | undefined;
-        }
-    ): any;
+        },
+    ): Promise<any>;
 
     sendAudio(
         chat_id: number | string,
@@ -187,8 +181,8 @@ declare class telebot {
             replyToMessage?: number | undefined;
             replyMarkup?: any;
             notification?: boolean | undefined;
-        }
-    ): any;
+        },
+    ): Promise<any>;
 
     sendDocument(
         chat_id: number | string,
@@ -200,8 +194,8 @@ declare class telebot {
             replyToMessage?: number | undefined;
             replyMarkup?: any;
             notification?: boolean | undefined;
-        }
-    ): any;
+        },
+    ): Promise<any>;
 
     sendSticker(
         chat_id: number | string,
@@ -212,8 +206,8 @@ declare class telebot {
             replyToMessage?: number | undefined;
             replyMarkup?: any;
             notification?: boolean | undefined;
-        }
-    ): any;
+        },
+    ): Promise<any>;
 
     sendVideo(
         chat_id: number | string,
@@ -228,8 +222,8 @@ declare class telebot {
             replyToMessage?: number | undefined;
             replyMarkup?: any;
             notification?: boolean | undefined;
-        }
-    ): any;
+        },
+    ): Promise<any>;
 
     sendVideoNote(
         chat_id: number | string,
@@ -241,8 +235,8 @@ declare class telebot {
             replyToMessage?: number | undefined;
             replyMarkup?: any;
             notification?: boolean | undefined;
-        }
-    ): any;
+        },
+    ): Promise<any>;
 
     sendVoice(
         chat_id: number | string,
@@ -255,14 +249,14 @@ declare class telebot {
             replyToMessage?: number | undefined;
             replyMarkup?: any;
             notification?: boolean | undefined;
-        }
-    ): any;
+        },
+    ): Promise<any>;
 
     sendLocation(
         chat_id: number | string,
         coords: [number, number],
-        opt?: { replyToMessage?: number | undefined; replyMarkup?: any; notification?: boolean | undefined }
-    ): any;
+        opt?: { replyToMessage?: number | undefined; replyMarkup?: any; notification?: boolean | undefined },
+    ): Promise<any>;
 
     sendVenue(
         chat_id: number | string,
@@ -274,24 +268,24 @@ declare class telebot {
             replyToMessage?: number | undefined;
             replyMarkup?: any;
             notification?: boolean | undefined;
-        }
-    ): any;
+        },
+    ): Promise<any>;
 
     sendContact(
         chat_id: number | string,
         number: string,
         firstName: string,
         lastName?: string,
-        opt?: { replyToMessage?: number | undefined; replyMarkup?: any; notification?: boolean | undefined }
-    ): any;
+        opt?: { replyToMessage?: number | undefined; replyMarkup?: any; notification?: boolean | undefined },
+    ): Promise<any>;
 
-    sendAction(chat_id: number | string, action: string): boolean;
+    sendAction(chat_id: number | string, action: string): Promise<boolean>;
 
     sendGame(
         chat_id: number | string,
         game_short_name: string,
-        opt?: { replyToMessage?: number | undefined; replyMarkup?: any; notification?: boolean | undefined }
-    ): any;
+        opt?: { replyToMessage?: number | undefined; replyMarkup?: any; notification?: boolean | undefined },
+    ): Promise<any>;
 
     setGameScore(
         user_id: number,
@@ -302,20 +296,20 @@ declare class telebot {
             chatId?: number | undefined;
             messageId?: number | undefined;
             inlineMessageId?: string | undefined;
-        }
-    ): boolean | Error | any;
+        },
+    ): Promise<boolean | Error | any>;
 
     getGameHighScores(
         user_id: number,
-        opt?: { chatId?: number | undefined; messageId?: number | undefined; inlineMessageId?: string | undefined }
-    ): any[];
+        opt?: { chatId?: number | undefined; messageId?: number | undefined; inlineMessageId?: string | undefined },
+    ): Promise<any[]>;
 
     getUserProfilePhotos(
         user_id: number,
-        opt?: { offset?: number | undefined; limit?: number | undefined }
-    ): any;
+        opt?: { offset?: number | undefined; limit?: number | undefined },
+    ): Promise<any>;
 
-    getFile(file_id: string): any;
+    getFile(file_id: string): Promise<any>;
 
     sendInvoice(
         chat_id: number | string,
@@ -338,29 +332,29 @@ declare class telebot {
             notification?: boolean | undefined;
             replyToMessage?: number | undefined;
             replyMarkup?: any;
-        }
-    ): any;
+        },
+    ): Promise<any>;
 
-    getChat(chat_id: number | string): any;
+    getChat(chat_id: number | string): Promise<any>;
 
-    leaveChat(chat_id: number | string): boolean;
+    leaveChat(chat_id: number | string): Promise<boolean>;
 
-    getChatAdministrators(chat_id: number | string): any[] | any;
+    getChatAdministrators(chat_id: number | string): Promise<any[] | any>;
 
-    getChatMembersCount(chat_id: number | string): number;
+    getChatMembersCount(chat_id: number | string): Promise<number>;
 
-    getChatMember(chat_id: number | string, user_id: number): any;
+    getChatMember(chat_id: number | string, user_id: number): Promise<any>;
 
-    kickChatMember(chat_id: number | string, user_id: number): boolean;
+    kickChatMember(chat_id: number | string, user_id: number): Promise<boolean>;
 
-    unbanChatMember(chat_id: number | string, user_id: number): boolean;
+    unbanChatMember(chat_id: number | string, user_id: number): Promise<boolean>;
 
     editMessageText(
         config: {
             chatId: number | string;
             messageId: number;
             inlineMsgId?: number | undefined;
-        }|{
+        } | {
             chatId?: number | string | undefined;
             messageId?: number | undefined;
             inlineMsgId: number;
@@ -368,34 +362,34 @@ declare class telebot {
         text: string,
         opt?: {
             parseMode?: string | undefined;
-        }
-    ): any | boolean;
+        },
+    ): Promise<any | boolean>;
 
     editMessageCaption(
         config: {
             chatId: number | string;
             messageId: number;
             inlineMsgId?: number | undefined;
-        }|{
+        } | {
             chatId?: number | string | undefined;
             messageId?: number | undefined;
             inlineMsgId: number;
         },
-        caption: string
-    ): any | boolean;
+        caption: string,
+    ): Promise<any | boolean>;
 
     editMessageReplyMarkup(
         config: {
             chatId: number | string;
             messageId: number;
             inlineMsgId?: number | undefined;
-        }|{
+        } | {
             chatId?: number | string | undefined;
             messageId?: number | undefined;
             inlineMsgId: number;
         },
-        replyMarkup: any
-    ): any | boolean;
+        replyMarkup: any,
+    ): Promise<any | boolean>;
 
     answerCallbackQuery(
         callback_query_id: string,
@@ -404,29 +398,29 @@ declare class telebot {
             url?: string | undefined;
             showAlert?: boolean | undefined;
             cacheTime?: number | undefined;
-        }
-    ): boolean;
+        },
+    ): Promise<boolean>;
 
     answerShippingQuery(
         shipping_query_id: string,
         ok: boolean,
-        opt?: { shippingOptions?: any[] | undefined; errorMessage?: string | undefined }
-    ): boolean;
+        opt?: { shippingOptions?: any[] | undefined; errorMessage?: string | undefined },
+    ): Promise<boolean>;
 
     answerPreCheckoutQuery(
         pre_checkout_query_id: string,
         ok: boolean,
-        opt?: { errorMessage?: string | undefined }
-    ): boolean;
+        opt?: { errorMessage?: string | undefined },
+    ): Promise<boolean>;
 
     setWebhook(
         url: string,
         certificate?: any,
         allowed_updates?: string[],
-        max_connections?: number
-    ): boolean;
+        max_connections?: number,
+    ): Promise<boolean>;
 
-    getWebhookInfo(): any;
+    getWebhookInfo(): Promise<any>;
 
-    deleteWebhook(): boolean;
+    deleteWebhook(): Promise<boolean>;
 }

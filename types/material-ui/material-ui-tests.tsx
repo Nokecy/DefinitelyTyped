@@ -1,9 +1,11 @@
-import * as React from 'react';
-import {
-  Component, ComponentClass, CSSProperties,
-  StatelessComponent, ReactElement, ReactInstance, ValidationMap
+import React, {
+  Component,
+  ComponentClass,
+  CSSProperties,
+  FunctionComponent,
+  ReactElement,
+  ReactInstance,
 } from 'react';
-import * as ReactDOM from 'react-dom';
 import * as PropTypes from 'prop-types';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { muiThemeable } from 'material-ui/styles/muiThemeable';
@@ -2271,7 +2273,7 @@ const lightBaseTheme = {
 const lightMuiTheme = getMuiTheme(lightBaseTheme);
 
 class DeepDownTheTree extends Component<{} & {muiTheme: MuiTheme}> {
-  static propTypes: ValidationMap<any> = {
+  static propTypes: PropTypes.ValidationMap<any> = {
     muiTheme: PropTypes.object.isRequired,
   };
 
@@ -2288,7 +2290,7 @@ interface Props {
   label: string;
   muiTheme?: MuiTheme | undefined;
 }
-const MuiThemeableFunction = muiThemeable()<StatelessComponent<Props>, Props>(props => {
+const MuiThemeableFunction = muiThemeable()<FunctionComponent<Props>, Props>(props => {
   return (
       <span style={{color: props.muiTheme.palette.textColor}}>
         Applied the Theme to functional component: {props.label}.
@@ -3024,7 +3026,7 @@ const ChipExampleSimple = () => (
     <Chip><Avatar size={32} color={blue300} backgroundColor={indigo900}>UI</Avatar> Avatar</Chip>
     <Chip style={styles.chip}>Styled</Chip>
     <Chip containerElement="span">String Container</Chip>
-    <Chip containerElement={() => {}}>ReactNode Container</Chip>
+    <Chip containerElement={<div />}>ReactNode Container</Chip>
   </div>
 );
 
@@ -4195,8 +4197,8 @@ const ListExampleMessages = () => (
   </div>
 );
 
-function wrapState(ComposedComponent: ComponentClass<__MaterialUI.List.SelectableProps>) {
-  return class SelectableList extends Component<{defaultValue: number}, {selectedIndex: number}> {
+function wrapState(ComposedComponent: ComponentClass<React.PropsWithChildren<__MaterialUI.List.SelectableProps>>) {
+  return class SelectableList extends Component<{children?: React.ReactNode, defaultValue: number}, {selectedIndex: number}> {
     static propTypes = {
       children: PropTypes.node.isRequired,
       defaultValue: PropTypes.number.isRequired,
@@ -4730,7 +4732,7 @@ class DropDownMenuOpenImmediateExample extends Component<{}, {value?: number | u
   }
 }
 
-const DropDownMenuAnchorExample: React.SFC = () => (
+const DropDownMenuAnchorExample: React.FC = () => (
   <DropDownMenu
     value={1}
     targetOrigin={{ horizontal: 'middle', vertical: 'top' }}
@@ -6965,6 +6967,7 @@ class BottomNavigationExample extends Component<{}, {
   }
 }
 
+// "http://www.material-ui.com/#/get-started/usage"
 class MaterialUiTests extends Component {
     render() {
     return (
@@ -6975,9 +6978,3 @@ class MaterialUiTests extends Component {
     );
   }
 }
-
-// "http://www.material-ui.com/#/get-started/usage"
-ReactDOM.render(
-  <MaterialUiTests />,
-  document.getElementById('app')
-);

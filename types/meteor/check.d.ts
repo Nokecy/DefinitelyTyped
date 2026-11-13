@@ -2,7 +2,7 @@ declare module 'meteor/check' {
     /**
      * The namespace for all Match types and methods.
      */
-    module Match {
+    namespace Match {
         interface Matcher<T> {
             _meteorCheckMatcherBrand: void;
         }
@@ -15,6 +15,7 @@ declare module 'meteor/check' {
             typeof Function |
             (new (...args: any[]) => any) |
             undefined | null | string | number | boolean |
+            // eslint-disable-next-line @definitelytyped/no-single-element-tuple-type
             [Pattern] |
             {[key: string]: Pattern} |
             Matcher<any>;
@@ -28,7 +29,8 @@ declare module 'meteor/check' {
             T extends typeof Function ? Function :
             T extends undefined | null | string | number | boolean ? T :
             T extends new (...args: any[]) => infer U ? U :
-            T extends [Pattern] ? PatternMatch<T[0]>[] :
+            // eslint-disable-next-line @definitelytyped/no-single-element-tuple-type
+            T extends [Pattern] ? Array<PatternMatch<T[0]>> :
             T extends {[key: string]: Pattern} ? {[K in keyof T]: PatternMatch<T[K]>} :
             unknown;
 
@@ -56,6 +58,7 @@ declare module 'meteor/check' {
          * Calls the function condition with the value as the argument. If condition returns true, this matches. If condition throws a `Match.Error` or returns false, this fails. If condition throws
          * any other error, that error is thrown from the call to `check` or `Match.test`.
          */
+        function Where<T>(condition: (val: any) => val is T): Matcher<T>;
         function Where(condition: (val: any) => boolean): Matcher<any>;
 
         /**

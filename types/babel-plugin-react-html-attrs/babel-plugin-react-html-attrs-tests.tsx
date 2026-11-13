@@ -36,7 +36,19 @@ const htmlAttributesTest = (
 
         <del datetime="test" />
 
-        <dialog open="" />
+        <dialog />
+        <dialog
+            closedby="closerequest"
+            onCancel={event => {
+                // $ExpectType SyntheticEvent<HTMLDialogElement, Event>
+                event;
+            }}
+            onClose={event => {
+                // $ExpectType SyntheticEvent<HTMLDialogElement, Event>
+                event;
+            }}
+            open
+        />
 
         <fieldset disabled="" />
 
@@ -99,6 +111,11 @@ const htmlAttributesTest = (
             srcdoc="test"
         />
         <iframe allowfullscreen="" allowtransparency="" seamless="" />
+
+        <picture>
+            <source media="test" srcSet="test" width={50} height={50} />
+            <img src="test" width={100} height={100} />
+        </picture>
 
         <img crossorigin="anonymous" referrerpolicy="origin" srcset="test" usemap="test" tabindex="-1" />
 

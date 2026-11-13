@@ -1,6 +1,43 @@
-import BaseComponent from "./base-component";
+import BaseComponent, { GetInstanceFactory, GetOrCreateInstanceFactory } from "./base-component";
+
+declare global {
+    interface JQuery {
+        carousel: Carousel.jQueryInterface;
+    }
+
+    interface Element {
+        addEventListener(
+            type: Carousel.Events | "slide.bs.carousel" | "slid.bs.carousel",
+            listener: (this: Element, ev: Carousel.Event) => any,
+            options?: boolean | AddEventListenerOptions,
+        ): void;
+    }
+}
 
 declare class Carousel extends BaseComponent {
+    /**
+     * Default settings of this plugin
+     *
+     * @link https://getbootstrap.com/docs/5.0/getting-started/javascript/#default-settings
+     */
+    static Default: Carousel.Options;
+
+    /**
+     * Static method which allows you to get the carousel instance associated
+     * with a DOM element.
+     */
+    static getInstance: GetInstanceFactory<Carousel>;
+
+    /**
+     * Static method which returns a carousel instance associated to a DOM element
+     *  or create a new one in case it wasn't initialised.
+     * You can use it like this: bootstrap.Carousel.getOrCreateInstance(element)
+     */
+    static carouselInstance: typeof Carousel.getOrCreateInstance;
+    static getOrCreateInstance: GetOrCreateInstanceFactory<Carousel, Partial<Carousel.Options>>;
+
+    static jQueryInterface: Carousel.jQueryInterface;
+
     constructor(element: string | Element, options?: Partial<Carousel.Options>);
 
     /**
@@ -38,23 +75,6 @@ declare class Carousel extends BaseComponent {
      * the slid.bs.carousel event occurs).
      */
     to(index: number): void;
-
-    /**
-     * Static method which allows you to get the carousel instance associated
-     * with a DOM element.
-     */
-    static getInstance(element: Element, options?: Partial<Carousel.Options>): Carousel | null;
-
-    static jQueryInterface: Carousel.jQueryInterface;
-
-    // static NAME: 'carousel';
-
-    /**
-     * Default settings of this plugin
-     *
-     * @link https://getbootstrap.com/docs/5.0/getting-started/javascript/#default-settings
-     */
-    static Default: Carousel.Options;
 }
 
 declare namespace Carousel {
@@ -65,7 +85,7 @@ declare namespace Carousel {
          *
          * @default 5000
          */
-        interval: number;
+        interval: number | false;
 
         /**
          * Whether the carousel should react to keyboard events.
@@ -84,7 +104,7 @@ declare namespace Carousel {
          *
          * @default "hover"
          */
-        pause: string | boolean;
+        pause: "hover" | false;
 
         /**
          * Autoplays the carousel after the user manually cycles the first item. If
@@ -92,7 +112,7 @@ declare namespace Carousel {
          *
          * @default false
          */
-        slide: string | boolean;
+        ride: "carousel" | boolean;
 
         /**
          * Whether the carousel should cycle continuously or have hard stops.
@@ -148,8 +168,8 @@ declare namespace Carousel {
     }
 
     type jQueryInterface = (
-        config?: Partial<Options> | number | "cycle" | "pause" | "prev" | "next" | "nextWhenVisible" | "dispose",
-    ) => void;
+        config?: Partial<Options> | number | "cycle" | "pause" | "prev" | "next" | "nextWhenVisible" | "to" | "dispose",
+    ) => JQuery;
 }
 
 export default Carousel;

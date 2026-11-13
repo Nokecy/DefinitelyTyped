@@ -1,16 +1,12 @@
-// Type definitions for react-portal 3.0
-// Project: https://github.com/tajo/react-portal#readme
-// Definitions by: Shun Takahashi <https://github.com/shuntksh>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.8
-
 import * as React from "react";
 
-interface CallBackProps extends React.Props<any> {
+interface CallBackProps extends React.RefAttributes<any> {
+    children?: React.ReactNode;
     closePortal(): void;
 }
 
 interface ReactPortalProps {
+    children: React.ReactElement;
     isOpened?: boolean | undefined;
     openByClickOn?: React.ReactElement<CallBackProps> | undefined;
     closeOnEsc?: boolean | undefined;

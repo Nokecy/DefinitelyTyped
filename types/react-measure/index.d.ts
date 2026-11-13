@@ -1,9 +1,3 @@
-// Type definitions for react-measure 2.0
-// Project: https://github.com/souporserious/react-measure
-// Definitions by: Alexey Svetliakov <https://github.com/asvetliakov>, Marc Fallows <https://github.com/marcfallows>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.8
-
 import * as React from "react";
 
 export type MeasurementType = "client" | "offset" | "scroll" | "bounds" | "margin";
@@ -54,11 +48,12 @@ export interface MeasureProps {
     margin?: boolean | undefined;
     innerRef?: React.Ref<Element> | undefined;
     onResize?(contentRect: ContentRect): void;
-    children?: React.SFC<MeasuredComponentProps> | undefined;
+    children?: React.FC<MeasuredComponentProps> | undefined;
 }
 
-export function withContentRect(types: ReadonlyArray<MeasurementType> | MeasurementType):
-    <T extends {}>(fn: MeasuredComponent<T>) => React.ComponentType<T>;
+export function withContentRect(
+    types: readonly MeasurementType[] | MeasurementType,
+): <T extends {}>(fn: MeasuredComponent<T>) => React.ComponentType<T>;
 
 declare class Measure extends React.Component<MeasureProps> {}
 export default Measure;

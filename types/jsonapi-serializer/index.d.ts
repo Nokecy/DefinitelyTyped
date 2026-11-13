@@ -1,8 +1,3 @@
-// Type definitions for jsonapi-serializer 3.6
-// Project: https://github.com/SeyZ/jsonapi-serializer#readme
-// Definitions by: Frank Chiang <https://github.com/chiangf>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 // TypeScript Version: 2.2
 
 export type RefFunction = (current: any, item: any) => string;
@@ -32,6 +27,7 @@ export interface SerializerOptions {
     typeForAttribute?: TypeForAttribute | undefined;
     meta?: object | undefined;
     transform?: Transform | undefined;
+    [key: string]: any;
 }
 
 export interface KeyForAttribute {
@@ -57,22 +53,23 @@ export interface DeserializerOptions {
         | "snake_case"
         | "camelCase"
         | "CamelCase"
-        | KeyForAttribute | undefined;
+        | KeyForAttribute
+        | undefined;
     pluralizeType?: boolean | undefined;
     typeAsAttribute?: boolean | undefined;
     transform?: Transform | undefined;
 }
 
 export interface DeserializerConstructor {
-    new (opts: DeserializerOptions): Deserializer;
+    new(opts: DeserializerOptions): Deserializer;
 }
 
 export interface SerializerConstructor {
-    new (collectionName: string, opts: SerializerOptions): Serializer;
+    new(collectionName: string, opts: SerializerOptions): Serializer;
 }
 
 export interface ErrorConstructor {
-    new (opts: JSONAPIErrorOptions | JSONAPIErrorOptions[]): JSONAPIError;
+    new(opts: JSONAPIErrorOptions | JSONAPIErrorOptions[]): JSONAPIError;
 }
 
 export interface JSONAPIError {

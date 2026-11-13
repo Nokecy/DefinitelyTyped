@@ -1,8 +1,3 @@
-// Type definitions for glob-watcher 5.0
-// Project: https://github.com/gulpjs/glob-watcher
-// Definitions by: TeamworkGuy2 <https://github.com/TeamworkGuy2>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 /// <reference types="node" />
 
 import * as fs from "fs";
@@ -13,7 +8,10 @@ import * as fs from "fs";
  * Globs are executed in order, so negations should follow positive globs
  * fs.src(['!b*.js', '*.js']) would not exclude any files, but this would: fs.src(['*.js', '!b*.js'])
  */
-declare function GlobWatcher(globs: string | string[], cb?: ((done: (err?: any) => void) => void) | (() => GlobWatcher.AsyncType)): fs.FSWatcher;
+declare function GlobWatcher(
+    globs: string | string[],
+    cb?: ((done: (err?: any) => void) => void) | (() => GlobWatcher.AsyncType),
+): fs.FSWatcher;
 
 /**
  * Watch globs and execute a function upon change, with intelligent defaults for debouncing and queueing.
@@ -21,10 +19,16 @@ declare function GlobWatcher(globs: string | string[], cb?: ((done: (err?: any) 
  * Globs are executed in order, so negations should follow positive globs
  * fs.src(['!b*.js', '*.js']) would not exclude any files, but this would: fs.src(['*.js', '!b*.js'])
  */
-declare function GlobWatcher(globs: string | string[], opt?: GlobWatcher.WatchOptions, cb?: ((done: (err?: any) => void) => void) | (() => GlobWatcher.AsyncType)): fs.FSWatcher;
+declare function GlobWatcher(
+    globs: string | string[],
+    opt?: GlobWatcher.WatchOptions,
+    cb?: ((done: (err?: any) => void) => void) | (() => GlobWatcher.AsyncType),
+): fs.FSWatcher;
 
 declare namespace GlobWatcher {
-    type AsyncType = NodeJS.EventEmitter | PromiseLike<any> | { subscribe(next?: (value: any) => void, error?: (error: any) => void, complete?: () => void): any };
+    type AsyncType = NodeJS.EventEmitter | PromiseLike<any> | {
+        subscribe(next?: (value: any) => void, error?: (error: any) => void, complete?: () => void): any;
+    };
 
     interface WatchOptions {
         /**
@@ -60,7 +64,7 @@ declare namespace GlobWatcher {
          * be ignored. The whole relative or absolute path is tested, not just filename. If a function
          * with two arguments is provided, it gets called twice per path - once with a single argument
          * (the path), second time with two arguments (the path and the
-         * [`fs.Stats`](http://nodejs.org/api/fs.html#fs_class_fs_stats) object of that path).
+         * [`fs.Stats`](https://nodejs.org/api/fs.html#fs_class_fs_stats) object of that path).
          */
         ignored?: any;
 
@@ -105,7 +109,7 @@ declare namespace GlobWatcher {
         useFsEvents?: boolean | undefined;
 
         /**
-         * If relying upon the [`fs.Stats`](http://nodejs.org/api/fs.html#fs_class_fs_stats) object that
+         * If relying upon the [`fs.Stats`](https://nodejs.org/api/fs.html#fs_class_fs_stats) object that
          * may get passed with `add`, `addDir`, and `change` events, set this to `true` to ensure it is
          * provided even in cases where it wasn't already available from the underlying watch events.
          */

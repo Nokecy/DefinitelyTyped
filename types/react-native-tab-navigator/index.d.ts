@@ -1,13 +1,9 @@
-// Type definitions for react-native-tab-navigator 0.3
-// Project: https://github.com/exponentjs/react-native-tab-navigator#readme
-// Definitions by: Kyle Roach <https://github.com/iRoachie>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.8
-
-import * as React from 'react';
-import { ViewStyle, TextStyle } from 'react-native';
+import * as React from "react";
+import { TextStyle, ViewStyle } from "react-native";
 
 export interface TabNavigatorProps {
+    children?: React.ReactNode;
+
     /**
      * Define for rendered scene
      */
@@ -42,6 +38,8 @@ interface TabNavigatorItemProps {
      */
     badgeText?: string | number | undefined;
 
+    children?: React.ReactNode;
+
     /**
      * Return whether the item is selected
      */
@@ -75,17 +73,17 @@ interface TabNavigatorItemProps {
     /**
      * Returns Item badge
      */
-    renderBadge?(): JSX.Element;
+    renderBadge?(): React.JSX.Element;
 
     /**
      * Returns Item icon
      */
-    renderIcon?(): JSX.Element;
+    renderIcon?(): React.JSX.Element;
 
     /**
      * Returns selected Item icon
      */
-    renderSelectedIcon?(): JSX.Element;
+    renderSelectedIcon?(): React.JSX.Element;
 }
 
 export class TabNavigator extends React.Component<TabNavigatorProps, any> {}

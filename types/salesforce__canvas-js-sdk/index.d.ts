@@ -1,8 +1,3 @@
-// Type definitions for @salesforce/canvas-js-sdk 1.41
-// Project: https://github.com/forcedotcom/SalesforceCanvasJavascriptSDK#readme
-// Definitions by: Zach Szafran <https://github.com/zms-dev>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 declare namespace Sfdc {
     function canvas(callback: () => void): void;
 
@@ -17,19 +12,26 @@ declare namespace Sfdc {
         }
 
         interface Response<T> {
+            readonly seq: number;
+            readonly parentVersion: string;
+            readonly clientVersion: string;
+            readonly payload: T;
             readonly status: number;
-            readonly payload?: T | undefined;
+            readonly statusText: string;
+            readonly responseHeaders: string;
+            readonly type: string;
+            readonly targetModule: string;
         }
 
         enum ApplicationOptions {
-            HIDE_HEADER = 'HideHeader',
-            HIDE_SHARE = 'HideShare',
-            PERSONAL_ENABLED = 'PersonalEnabled',
+            HIDE_HEADER = "HideHeader",
+            HIDE_SHARE = "HideShare",
+            PERSONAL_ENABLED = "PersonalEnabled",
         }
 
         enum ApplicationAuthType {
-            SIGNED_REQUEST = 'SIGNED_REQUEST',
-            OAUTH = 'OAUTH',
+            SIGNED_REQUEST = "SIGNED_REQUEST",
+            OAUTH = "OAUTH",
         }
 
         // see https://developer.salesforce.com/docs/atlas.en-us.platform_connect.meta/platform_connect/application_object.htm;
@@ -48,7 +50,7 @@ declare namespace Sfdc {
         }
 
         enum UserType {
-            STANDARD = 'STANDARD',
+            STANDARD = "STANDARD",
         }
 
         // see https://developer.salesforce.com/docs/atlas.en-us.platform_connect.meta/platform_connect/user_object.htm
@@ -92,22 +94,22 @@ declare namespace Sfdc {
         }
 
         enum EnvironmentDisplayLocation {
-            CHATTER = 'Chatter',
-            CHATTER_FEED = 'ChatterFeed',
-            MOBILE_NAV = 'MobileNav',
-            OPEN_CTI = 'OpenCTI',
-            PAGE_LAYOUT = 'PageLayout',
-            PUBLISHER = 'Publisher',
-            SERVICE_DESK = 'ServiceDesk',
-            VISUAL_FORCE = 'Visualforce',
-            NONE = 'None',
+            CHATTER = "Chatter",
+            CHATTER_FEED = "ChatterFeed",
+            MOBILE_NAV = "MobileNav",
+            OPEN_CTI = "OpenCTI",
+            PAGE_LAYOUT = "PageLayout",
+            PUBLISHER = "Publisher",
+            SERVICE_DESK = "ServiceDesk",
+            VISUAL_FORCE = "Visualforce",
+            NONE = "None",
         }
 
         enum EnvironmentDisplaySubLocation {
-            MOBILE_CARD_FULLVIEW = 'S1MobileCardFullview',
-            MOBILE_CARD_PREVIEW = 'S1MobileCardPreview',
-            RECORD_HOME_PREVIEW = 'S1RecordHomePreview',
-            RECORD_HOME_FULLVIEW = 'S1RecordHomeFullview',
+            MOBILE_CARD_FULLVIEW = "S1MobileCardFullview",
+            MOBILE_CARD_PREVIEW = "S1MobileCardPreview",
+            RECORD_HOME_PREVIEW = "S1RecordHomePreview",
+            RECORD_HOME_FULLVIEW = "S1RecordHomeFullview",
         }
 
         // see https://developer.salesforce.com/docs/atlas.en-us.platform_connect.meta/platform_connect/attributes_object.htm
@@ -184,7 +186,7 @@ declare namespace Sfdc {
 
         function isUndefined(value: unknown): value is undefined;
 
-        function isNil(value: unknown): value is undefined | null | '';
+        function isNil(value: unknown): value is undefined | null | "";
 
         function isNumber(value: unknown): value is number;
 
@@ -337,7 +339,7 @@ declare namespace Sfdc {
             }
 
             interface StreamSubscriptionRef {
-                readonly name: 'sfdc.streamingapi';
+                readonly name: "sfdc.streamingapi";
                 readonly params: StreamSubscriptionParams;
             }
 
@@ -355,7 +357,7 @@ declare namespace Sfdc {
                 readonly payload: unknown;
             }
 
-            function ctx(callback: (msg: Response<Context>) => void, client: Client): void;
+            function ctx(callback: (msg: Response<Context | string>) => void, client: Client): void;
 
             function ajax(url: string, settings: AjaxSettings): void;
 
@@ -377,7 +379,7 @@ declare namespace Sfdc {
 
             function signedrequest(req?: SignedRequest): SignedRequest;
 
-            function refreshSignedRequest(cb: (data: Response<string>) => void): void;
+            function refreshSignedRequest(cb: (data: Response<{ response: string }>) => void): void;
 
             function repost(refresh?: boolean): void;
         }
@@ -407,6 +409,7 @@ declare namespace Sfdc {
                 readonly redirect_uri: string;
                 readonly state?: string | undefined;
                 readonly display?: string | undefined;
+                readonly scope?: string | undefined;
             }
 
             interface LoginContext {

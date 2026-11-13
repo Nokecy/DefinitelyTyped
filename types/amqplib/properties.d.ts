@@ -170,13 +170,13 @@ export interface GetMessageFields extends CommonMessageFields {
 }
 
 export interface ConsumeMessageFields extends CommonMessageFields {
-    deliveryTag: number;
+    consumerTag: string;
 }
 
 export interface MessageProperties {
     contentType: any | undefined;
     contentEncoding: any | undefined;
-    headers: MessagePropertyHeaders;
+    headers: MessagePropertyHeaders | undefined;
     deliveryMode: any | undefined;
     priority: any | undefined;
     correlationId: any | undefined;

@@ -1,12 +1,13 @@
+//////////////////////////////////////////////////////
+// BEWARE: DO NOT EDIT MANUALLY! Changes will be lost!
+//////////////////////////////////////////////////////
+
+import { Events } from "./events";
+import { ExtensionTypes } from "./extensionTypes";
+
 /**
  * Namespace: browser.downloads
- * Generated from Mozilla sources. Do not manually edit!
- *
- * Permissions: "downloads"
  */
-import { ExtensionTypes } from "./extensionTypes";
-import { Events } from "./events";
-
 export namespace Downloads {
     type FilenameConflictAction = "uniquify" | "overwrite" | "prompt";
 
@@ -77,6 +78,12 @@ export namespace Downloads {
          * False if this download is recorded in the history, true if it is not recorded.
          */
         incognito: boolean;
+
+        /**
+         * The cookie store ID of the contextual identity.
+         * Optional.
+         */
+        cookieStoreId?: string;
 
         /**
          * Indication of whether this download is thought to be safe or known to be suspicious.
@@ -289,6 +296,12 @@ export namespace Downloads {
         filename?: string;
 
         /**
+         * The cookie store ID of the contextual identity.
+         * Optional.
+         */
+        cookieStoreId?: string;
+
+        /**
          * Indication of whether this download is thought to be safe or known to be suspicious.
          * Optional.
          */
@@ -372,6 +385,12 @@ export namespace Downloads {
          * Optional.
          */
         incognito?: boolean;
+
+        /**
+         * The cookie store ID of the contextual identity; requires "cookies" permission.
+         * Optional.
+         */
+        cookieStoreId?: string;
 
         /**
          * Optional.
@@ -542,8 +561,6 @@ export namespace Downloads {
          * Find <a href='#type-DownloadItem'>DownloadItems</a>. Set <code>query</code> to the empty object to get all <a
          * href='#type-DownloadItem'>DownloadItems</a>. To get a specific <a href='#type-DownloadItem'>DownloadItem</a>,
          * set only the <code>id</code> field.
-         *
-         * @param query
          */
         search(query: DownloadQuery): Promise<DownloadItem[]>;
 
@@ -589,15 +606,11 @@ export namespace Downloads {
 
         /**
          * Open the downloaded file.
-         *
-         * @param downloadId
          */
         open(downloadId: number): Promise<void>;
 
         /**
          * Show the downloaded file in its folder in a file manager.
-         *
-         * @param downloadId
          */
         show(downloadId: number): Promise<boolean>;
 
@@ -605,20 +618,13 @@ export namespace Downloads {
 
         /**
          * Erase matching <a href='#type-DownloadItem'>DownloadItems</a> from history
-         *
-         * @param query
          */
         erase(query: DownloadQuery): Promise<number[]>;
 
-        /**
-         * @param downloadId
-         */
         removeFile(downloadId: number): Promise<void>;
 
         /**
          * This event fires with the <a href='#type-DownloadItem'>DownloadItem</a> object when a download begins.
-         *
-         * @param downloadItem
          */
         onCreated: Events.Event<(downloadItem: DownloadItem) => void>;
 
@@ -632,8 +638,6 @@ export namespace Downloads {
         /**
          * When any of a <a href='#type-DownloadItem'>DownloadItem</a>'s properties except <code>bytesReceived</code> changes,
          * this event fires with the <code>downloadId</code> and an object containing the properties that changed.
-         *
-         * @param downloadDelta
          */
         onChanged: Events.Event<(downloadDelta: OnChangedDownloadDeltaType) => void>;
     }

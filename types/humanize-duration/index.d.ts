@@ -1,23 +1,22 @@
-// Type definitions for humanize-duration 3.25
-// Project: https://github.com/EvanHahn/HumanizeDuration.js
-// Definitions by: Rigoberto Molina <https://github.com/RigoTheDev>
-//                 Piotr Błażejewicz <https://github.com/peterblazejewicz>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 export as namespace humanizeDuration;
 
 declare namespace humanizeDuration {
     type LanguageCode =
+        | "af"
         | "ar"
         | "bg"
+        | "bn"
         | "ca"
         | "cs"
+        | "cy"
         | "da"
         | "de"
         | "el"
         | "en"
+        | "eo"
         | "es"
         | "et"
+        | "eu"
         | "fa"
         | "fi"
         | "fo"
@@ -31,10 +30,15 @@ declare namespace humanizeDuration {
         | "is"
         | "it"
         | "ja"
+        | "km"
+        | "kn"
         | "ko"
+        | "ku"
         | "lo"
         | "lt"
         | "lv"
+        | "mk"
+        | "mr"
         | "ms"
         | "nl"
         | "no"
@@ -44,7 +48,12 @@ declare namespace humanizeDuration {
         | "ru"
         | "sk"
         | "sl"
+        | "sq"
+        | "sr"
         | "sv"
+        | "sw"
+        | "ta"
+        | "te"
         | "th"
         | "tr"
         | "uk"
@@ -131,6 +140,12 @@ declare namespace humanizeDuration {
          * Customize the value used to calculate each unit of time.
          */
         unitMeasures?: UnitMeasuresOptions | undefined;
+        /**
+         * Array of ten strings to which will replace the numerals 0-9.
+         */
+        digitReplacements?:
+            | [string, string, string, string, string, string, string, string, string, string]
+            | undefined;
     }
 
     interface HumanizerOptions extends Options {

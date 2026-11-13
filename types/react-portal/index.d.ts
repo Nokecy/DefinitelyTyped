@@ -1,13 +1,6 @@
-// Type definitions for react-portal 4.0
-// Project: https://github.com/tajo/react-portal#readme
-// Definitions by: Shun Takahashi <https://github.com/shuntksh>
-//                 Horus Lugo <https://github.com/HorusGoul>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.8
-
 import * as React from "react";
 
-export interface PortalProps extends React.Props<any> {
+export interface PortalProps {
     children: React.ReactNode;
     node?: Element | null | undefined;
 }
@@ -21,7 +14,7 @@ export interface PortalFunctionParams {
     isOpen: boolean;
 }
 
-export interface PortalWithStateProps extends React.Props<any> {
+export interface PortalWithStateProps {
     children: (params: PortalFunctionParams) => React.ReactNode;
     node?: Element | null | undefined;
     defaultOpen?: boolean | undefined;

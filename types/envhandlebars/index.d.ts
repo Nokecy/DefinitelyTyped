@@ -1,9 +1,5 @@
-// Type definitions for envhandlebars 1.4
-// Project: https://github.com/cgmartin/envhandlebars#readme
-// Definitions by: Piotr Błażejewicz <https://github.com/peterblazejewicz>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-/// <reference types="Node" />
-import H = require('handlebars');
+/// <reference types="node" />
+import H = require("handlebars");
 
 /**
  * A simple templating utility, akin to envsubst, but using Handlebars for more complex logic.
@@ -24,7 +20,7 @@ declare namespace envhandlebars {
         /** @default process.stderr */
         stderr?: typeof process.stderr | undefined;
         /** @default true */
-        arrayEnabled?: boolean | undefined;
+        arraysEnabled?: boolean | undefined;
         /** @default false */
         arrayVarPrefix?: boolean | undefined;
         /**

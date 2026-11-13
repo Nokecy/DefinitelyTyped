@@ -1,10 +1,3 @@
-// Type definitions for react-custom-scrollbars 4.0
-// Project: https://github.com/malte-wessel/react-custom-scrollbars
-// Definitions by:  David-LeBlanc-git <https://github.com/David-LeBlanc-git>
-//                  kittimiyo <https://github.com/kittimiyo>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.8
-
 import * as React from "react";
 
 export as namespace ReactCustomScrollbars;
@@ -27,11 +20,11 @@ export interface ScrollbarProps extends React.HTMLProps<Scrollbars> {
     onScrollStop?: (() => void) | undefined;
     onUpdate?: ((values: positionValues) => void) | undefined;
 
-    renderView?: React.StatelessComponent<any> | undefined;
-    renderTrackHorizontal?: React.StatelessComponent<any> | undefined;
-    renderTrackVertical?: React.StatelessComponent<any> | undefined;
-    renderThumbHorizontal?: React.StatelessComponent<any> | undefined;
-    renderThumbVertical?: React.StatelessComponent<any> | undefined;
+    renderView?: React.FunctionComponent<any> | undefined;
+    renderTrackHorizontal?: React.FunctionComponent<any> | undefined;
+    renderTrackVertical?: React.FunctionComponent<any> | undefined;
+    renderThumbHorizontal?: React.FunctionComponent<any> | undefined;
+    renderThumbVertical?: React.FunctionComponent<any> | undefined;
 
     tagName?: string | undefined;
     hideTracksWhenNotNeeded?: boolean | undefined;

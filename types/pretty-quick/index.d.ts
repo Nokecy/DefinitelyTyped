@@ -1,10 +1,4 @@
-// Type definitions for pretty-quick 2.0
-// Project: https://github.com/azz/pretty-quick#readme
-// Definitions by: Piotr Błażejewicz <https://github.com/peterblazejewicz>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// Minimum TypeScript Version: 3.7
-
-import { ResolveConfigOptions } from 'prettier';
+import { ResolveConfigOptions } from "prettier";
 
 declare namespace prettyQuick {
     interface Options {
@@ -21,6 +15,7 @@ declare namespace prettyQuick {
         branch?: string | undefined;
         bail?: boolean | undefined;
         check?: boolean | undefined;
+        ignorePath?: string | undefined;
         verbose?: boolean | undefined;
         onFoundSinceRevision?: ((name: string, revision: string) => void) | undefined;
         onFoundChangedFiles?: ((changedFiles: string[]) => void) | undefined;

@@ -1,8 +1,3 @@
-// Type definitions for decomment 0.9
-// Project: https://github.com/vitaly-t/decomment
-// Definitions by: Piotr Błażejewicz (Peter Blazejewicz) <https://github.com/peterblazejewicz>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 /**
  * This method first checks if the code starts with <,
  * as an HTML, and if so, all <!-- comment --> entries are removed, according to the options
@@ -32,9 +27,14 @@ declare namespace decomment {
         space?: boolean | undefined;
         /**
          * remove empty lines that follow removed full-line comments
-         * @defualt false - do not trim comments
+         * @default false - do not trim comments
          */
         trim?: boolean | undefined;
+        /**
+         * pass `tolerant` flag to [esprima] parser (the parser _may_ choose to continue parsing and produce a syntax tree).
+         * @default false - performs strict parsing.
+         */
+        tolerant?: boolean | undefined;
     }
 
     /**

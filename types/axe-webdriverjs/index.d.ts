@@ -1,9 +1,3 @@
-// Type definitions for axe-webdriverjs 2.3
-// Project: https://github.com/dequelabs/axe-webdriverjs#readme
-// Definitions by: Joshua Goldberg <https://github.com/JoshuaKGoldberg>
-//                 Tyler Krupicka <https://github.com/tylerkrupicka>
-//                 Piotr Błażejewicz <https://github.com/peterblazejewicz>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 import { Result, RunOptions, Spec } from "axe-core";
 import { WebDriver } from "selenium-webdriver";
 
@@ -78,7 +72,7 @@ export interface AxeBuilder {
      * @param callback   Function to execute when analysis completes.
      */
     analyze(
-        callback?: AnalyzeCallback | DeprecatedAnalyzeCallback
+        callback?: AnalyzeCallback | DeprecatedAnalyzeCallback,
     ): Promise<AxeAnalysis>;
 }
 
@@ -92,5 +86,5 @@ export interface BuilderOptions {
 
 export const AxeBuilder: {
     (driver: WebDriver, source?: string, builderOptions?: BuilderOptions): AxeBuilder;
-    new (driver: WebDriver, source?: string, builderOptions?: BuilderOptions): AxeBuilder;
+    new(driver: WebDriver, source?: string, builderOptions?: BuilderOptions): AxeBuilder;
 };

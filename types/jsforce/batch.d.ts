@@ -1,7 +1,8 @@
-import { Stream, Writable } from 'stream';
+import { Stream, Writable } from "stream";
 
-import { RecordResult } from './record-result';
-import { Record } from './record';
+import { Record } from "./record";
+import { RecordResult } from "./record-result";
+import { Parsable } from "./record-stream";
 
 export interface BatchInfo {
     id: string;
@@ -23,9 +24,13 @@ export interface BatchResultInfo {
 
 export class Batch extends Writable {
     check(callback?: (batchInfo: BatchInfo) => void): Promise<BatchInfo>;
-    execute(input?: Record[] | Stream | string, callback?: (err: Error, result: RecordResult[] | BatchResultInfo[]) => void): Batch;
+    execute(
+        input?: Record[] | Stream | string,
+        callback?: (err: Error, result: RecordResult[] | BatchResultInfo[]) => void,
+    ): Batch;
     poll(interval: number, timeout: number): void;
     retrieve(callback?: (batchInfo: BatchInfo) => void): Promise<RecordResult[] | BatchResultInfo[]>;
+    result(resultId: string): Parsable<any>;
     then(): Promise<any>;
     thenAll(callback: (data: any) => void): void;
 }

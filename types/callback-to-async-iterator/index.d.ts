@@ -1,11 +1,5 @@
-// Type definitions for callback-to-async-iterator 1.1
-// Project: https://github.com/withspectrum/callback-to-async-iterator#readme
-// Definitions by: Zachary Svoboda <https://github.com/zacnomore>
-//                 Affan Shahid <https://github.com/affanshahid>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// Minimum TypeScript Version: 3.6
-
 export interface AsyncifyOptions<T, R> {
+    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
     onClose?: ((arg: R) => void | T) | undefined;
     onError?: (() => Error) | undefined;
     buffering?: boolean | undefined;
@@ -14,4 +8,4 @@ export interface AsyncifyOptions<T, R> {
 export default function callbackToAsyncIterator<T, R = void>(
     listener: (callback: (message: T) => void) => Promise<R>,
     options?: AsyncifyOptions<T, R>,
-): AsyncIterator<T>;
+): AsyncIterableIterator<T>;

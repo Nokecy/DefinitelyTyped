@@ -1,17 +1,3 @@
-// Type definitions for react-modal 3.12
-// Project: https://github.com/reactjs/react-modal
-// Definitions by: Rajab Shakirov <https://github.com/radziksh>,
-//                 Drew Noakes <https://github.com/drewnoakes>,
-//                 Thomas B Homburg <https://github.com/homburg>,
-//                 Tatu Tamminen <https://github.com/ttamminen>,
-//                 Uwe Wiemer <https://github.com/hallowatcher>,
-//                 Peter Blazejewicz <https://github.com/peterblazejewicz>,
-//                 Justin Powell <https://github.com/jpowell>
-//                 Juwan Wheatley <https://github.com/fiberjw>
-//                 Nitzan Mousan <https://github.com/nitzanmo>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.8
-
 import * as React from "react";
 
 export = ReactModal;
@@ -35,7 +21,7 @@ declare namespace ReactModal {
         /** Identifies the element (or elements) that describes the object. */
         describedby?: string | undefined;
         /** Indicates whether an element is modal when displayed. */
-        modal?: boolean | 'false' | 'true' | undefined;
+        modal?: boolean | "false" | "true" | undefined;
     }
 
     /** Describes overlay and content element references passed to onAfterOpen function */
@@ -52,6 +38,8 @@ declare namespace ReactModal {
     }
 
     interface Props {
+        children?: React.ReactNode;
+
         /* Boolean describing if the modal should be shown or not. Defaults to false. */
         isOpen: boolean;
 
@@ -74,7 +62,7 @@ declare namespace ReactModal {
         overlayClassName?: string | Classes | undefined;
 
         /* Set this to properly hide your application from assistive screenreaders and other assistive technologies while the modal is open. */
-        appElement?: HTMLElement | {} | undefined;
+        appElement?: HTMLElement | HTMLElement[] | HTMLCollection | NodeList | undefined;
 
         /* Function that will be run after the modal has opened. */
         onAfterOpen?: OnAfterOpenCallback | undefined;
@@ -128,9 +116,13 @@ declare namespace ReactModal {
         overlayRef?: ((instance: HTMLDivElement) => void) | undefined;
 
         /* Custom Overlay element. */
-        overlayElement?: ((props: React.ComponentPropsWithRef<"div">, contentEl: React.ReactElement) => React.ReactElement) | undefined;
+        overlayElement?:
+            | ((props: React.ComponentPropsWithRef<"div">, contentEl: React.ReactElement) => React.ReactElement)
+            | undefined;
         /* Custom Content element. */
-        contentElement?: ((props: React.ComponentPropsWithRef<"div">, children: React.ReactNode) => React.ReactElement) | undefined;
+        contentElement?:
+            | ((props: React.ComponentPropsWithRef<"div">, children: React.ReactNode) => React.ReactElement)
+            | undefined;
 
         /* String value of data-test-id attibute to be applied to to the modal content. */
         testId?: string | undefined;

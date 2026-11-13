@@ -1,11 +1,5 @@
-// Type definitions for non-npm package Wechat Mini Program - xmly-plugin 3.2
-// Project: https://mp.weixin.qq.com/wxopen/pluginbasicprofile?action=intro&appid=wxc6a13dda5815c529
-// Definitions by:  TB <https://github.com/Durianicecream>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 4.2
-
-import XMLY from './xmly';
-import XMplayer from './player';
+import XMplayer from "./player";
+import XMLY from "./xmly";
 
 interface options {
     appKey: string; // 开放平台应用接入申请的app_key
@@ -18,7 +12,7 @@ interface options {
      */
     appSecret?: string; // 开放平台应用接入申请的app_secret（免登录授权必传）
     accessTokenUrl?: string; // 应用登记的oauth2授权回调地址（标准登录授权，必传）
-    getAccessToken?: (() => string); // 合作方实现：获取 access_token 的 js 函数（第三方账号登录授权，必传）
+    getAccessToken?: () => string; // 合作方实现：获取 access_token 的 js 函数（第三方账号登录授权，必传）
 }
 
 export default class XMPlugin {
@@ -34,7 +28,7 @@ export default class XMPlugin {
     /**
      * 获取当前插件实例
      */
-    static getInstance(): XMPlugin | void;
+    static getInstance(): XMPlugin | undefined;
     /**
      * 销毁方法
      */

@@ -1,11 +1,7 @@
-// Type definitions for pdf-fill-form 5.0
-// Project: https://github.com/tpisto/pdf-fill-form#readme
-// Definitions by: Grégoire Lodi <https://github.com/lodi-g>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 /// <reference types="node" />
 
 export interface WritableFields {
-    [key: string]: string;
+    [key: string]: string | boolean | number;
 }
 
 export type ReadableFields = Array<{
@@ -38,6 +34,7 @@ export function readBuffer(sourceBuffer: Buffer): Promise<ReadableFields>;
 export function readBufferSync(sourceBuffer: Buffer): ReadableFields;
 
 export function write(sourceFile: string, fields: WritableFields, options?: Options): Promise<Buffer>;
+export function writeSync(sourceFile: string, fields: WritableFields, options?: Options): Buffer;
 export function writeBuffer(sourceBuffer: Buffer, fields: WritableFields, options?: Options): Promise<Buffer>;
 export function writeBufferSync(sourceBuffer: Buffer, fields: WritableFields, options?: Options): Buffer;
 

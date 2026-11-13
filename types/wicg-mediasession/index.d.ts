@@ -1,10 +1,3 @@
-// Type definitions for non-npm package Media Session API 1.1
-// Project: https://wicg.github.io/mediasession/
-// Definitions by: Julien CROUZET <https://github.com/jucrouzet>
-//                 Eana Hufwe <https://github.com/blueset>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// Minimum TypeScript Version: 4.4
-
 interface Navigator {
     readonly mediaSession: MediaSession;
 }
@@ -24,11 +17,22 @@ interface MediaSession {
     metadata: MediaMetadata | null;
 
     // Set/Unset actions handlers.
-    setActionHandler(action: "seekto", listener: ((details: Required<Pick<MediaSessionActionDetails, "seekTime">> & MediaSessionActionDetails) => void) | null): void;
+    setActionHandler(
+        action: "seekto",
+        listener:
+            | ((details: Required<Pick<MediaSessionActionDetails, "seekTime">> & MediaSessionActionDetails) => void)
+            | null,
+    ): void;
     setActionHandler(action: MediaSessionAction, listener: ((details: MediaSessionActionDetails) => void) | null): void;
 
     // Set/unset position state
-    setPositionState: SetPositionState;
+    setPositionState(playbackState?: MediaPositionState): void;
+
+    // Set/unset active camera
+    setCameraActive(active: boolean): void;
+
+    // Set/unset active microphone
+    setMicrophoneActive(active: boolean): void;
 }
 
 interface MediaImage {
@@ -59,7 +63,7 @@ interface MediaMetadata {
     // Media's album.
     album: string;
     // Media's artwork.
-    artwork: ReadonlyArray<MediaImage>;
+    artwork: readonly MediaImage[];
 }
 
 declare var MediaMetadata: {
@@ -83,11 +87,11 @@ interface MediaSessionActionDetails {
     action: MediaSessionAction;
 
     // This MAY be provided when the action is seekbackward or seekforward. Stores number of seconds to move the playback time by.
-    seekOffset?: number | null | undefined;
+    seekOffset?: number | undefined;
 
     // MUST be provided when action is seekto. Stores the time in seconds to move the playback time to.
-    seekTime?: number | null | undefined;
+    seekTime?: number | undefined;
 
     // MAY be provided when action is seekto. Stores true if the action is being called multiple times as part of a sequence and this is not the last call in that sequence.
-    fastSeek?: boolean | null | undefined;
+    fastSeek?: boolean | undefined;
 }

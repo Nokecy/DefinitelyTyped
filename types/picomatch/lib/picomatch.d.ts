@@ -1,6 +1,6 @@
-import constantsImport = require('./constants');
-import parseImport = require('./parse');
-import scanImport = require('./scan');
+import constantsImport = require("./constants");
+import parseImport = require("./parse");
+import scanImport = require("./scan");
 
 /**
  * Creates a matcher function from one or more glob patterns. The
@@ -21,7 +21,7 @@ import scanImport = require('./scan');
  * @return Returns a matcher function.
  * @api public
  */
-declare function picomatch<T extends true | false>(
+declare function picomatch<T extends true | false = false>(
     glob: picomatch.Glob,
     options?: picomatch.PicomatchOptions,
     returnState?: T,
@@ -31,7 +31,8 @@ declare namespace picomatch {
     type Glob = string | string[];
 
     interface Matcher {
-        (test: string): boolean;
+        (test: string, returnObject?: false | undefined): boolean;
+        (test: string, returnObject: true): Result;
     }
 
     interface MatcherWithState extends Matcher {
@@ -45,8 +46,8 @@ declare namespace picomatch {
         posix: boolean;
         input: string;
         output: string;
-        match: ReturnType<typeof test>['match'];
-        isMatch: ReturnType<typeof test>['isMatch'];
+        match: ReturnType<typeof test>["match"];
+        isMatch: ReturnType<typeof test>["isMatch"];
     }
 
     interface PicomatchOptions {
@@ -68,10 +69,6 @@ declare namespace picomatch {
          */
         contains?: boolean | undefined;
         /**
-         * Current working directory. Used by `picomatch.split()`
-         */
-        cwd?: string | undefined;
-        /**
          * Debug regular expressions when an error is thrown.
          */
         debug?: boolean | undefined;
@@ -84,11 +81,8 @@ declare namespace picomatch {
          * The function receives the range values as two arguments, and it must return a string to be used in the generated regex.
          * It's recommended that returned strings be wrapped in parentheses.
          */
-        expandRange?: ((a: string, b: string) => string) | undefined;
-        /**
-         * Throws an error if no matches are found. Based on the bash option of the same name.
-         */
-        failglob?: boolean | undefined;
+        expandRange?(from: string, to: string, options: PicomatchOptions): string;
+        expandRange?(from: string, to: string, step: string, options: PicomatchOptions): string;
         /**
          * To speed up processing, full parsing is skipped for a handful common glob patterns. Disable this behavior by setting this option to `false`.
          */
@@ -96,7 +90,7 @@ declare namespace picomatch {
         /**
          * Regex flags to use in the generated regex. If defined, the `nocase` option will be overridden.
          */
-        flags?: boolean | undefined;
+        flags?: string | undefined;
         /**
          * Custom function for formatting the returned string. This is useful for removing leading slashes, converting Windows paths to Posix paths, etc.
          */
@@ -114,35 +108,25 @@ declare namespace picomatch {
          */
         literalBrackets?: boolean | undefined;
         /**
-         * Support regex positive and negative lookbehinds. Note that you must be using Node 8.1.10 or higher to enable regex lookbehinds.
-         */
-        lookbehinds?: boolean | undefined;
-        /**
          * Alias for `basename`
          */
         matchBase?: boolean | undefined;
         /**
          * Limit the max length of the input string. An error is thrown if the input string is longer than this value.
          */
-        maxLength?: boolean | undefined;
+        maxLength?: number | undefined;
         /**
          * Disable brace matching, so that `{a,b}` and `{1..3}` would be treated as literal characters.
          */
         nobrace?: boolean | undefined;
         /**
-         * Disable brace matching, so that `{a,b}` and `{1..3}` would be treated as literal characters.
+         * Disable matching with regex brackets.
          */
         nobracket?: boolean | undefined;
         /**
          * Make matching case-insensitive. Equivalent to the regex `i` flag. Note that this option is overridden by the `flags` option.
          */
         nocase?: boolean | undefined;
-        /**
-         * @deprecated use `nounique` instead.
-         * This option will be removed in a future major release. By default duplicates are removed.
-         * Disable uniquification by setting this option to false.
-         */
-        nodupes?: boolean | undefined;
         /**
          * Alias for `noextglob`
          */
@@ -160,10 +144,6 @@ declare namespace picomatch {
          */
         nonegate?: boolean | undefined;
         /**
-         * Disable support for regex quantifiers (like `a{1,2}`) and treat them as brace patterns to be expanded.
-         */
-        noquantifiers?: boolean | undefined;
-        /**
          * Function to be called on ignored items.
          */
         onIgnore?: ((result: Result) => void) | undefined;
@@ -180,11 +160,7 @@ declare namespace picomatch {
          */
         posix?: boolean | undefined;
         /**
-         * Convert all slashes in file paths to forward slashes. This does not convert slashes in the glob pattern itself
-         */
-        posixSlashes?: boolean | undefined;
-        /**
-         * Convert all slashes in file paths to forward slashes. This does not convert slashes in the glob pattern itself
+         * String to prepend to the generated regex used for matching.
          */
         prepend?: boolean | undefined;
         /**
@@ -204,9 +180,9 @@ declare namespace picomatch {
          */
         unescape?: boolean | undefined;
         /**
-         * Alias for `posixSlashes`, for backwards compatibility.
+         * Also accept backslashes as the path separator.
          */
-        unixify?: boolean | undefined;
+        windows?: boolean | undefined;
     }
 
     function test(
@@ -241,9 +217,11 @@ declare namespace picomatch {
         options?: PicomatchOptions,
         returnOutput?: boolean,
         returnState?: boolean,
-    ): typeof compileRe;
+    ): ReturnType<typeof compileRe>;
 
-    function toRegex(source: string | RegExp, options?: { flags?: string | undefined; nocase?: boolean | undefined; debug?: boolean | undefined }): RegExp;
+    type ToRegexOptions = Pick<PicomatchOptions, "flags" | "nocase" | "debug">;
+
+    function toRegex(source: string | RegExp, options?: ToRegexOptions): RegExp;
 
     const constants: typeof constantsImport;
 }

@@ -1,9 +1,4 @@
-// Type definitions for react-stack-grid 0.7
-// Project: https://github.com/tsuyoshiwada/react-stack-grid#readme
-// Definitions by: Naveen DA <https://github.com/NaveenDA>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
-import * as React from 'react';
+import * as React from "react";
 
 interface Units {
     length: string;
@@ -13,6 +8,7 @@ export interface Grid {
     updateLayout: () => void;
 }
 export interface StackGridProps {
+    children?: React.ReactNode;
     columnWidth: number | string;
     className?: string | undefined;
     style?: React.CSSProperties | undefined;

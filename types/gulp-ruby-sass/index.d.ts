@@ -1,10 +1,4 @@
-// Type definitions for gulp-ruby-sass v1.0.5
-// Project: https://github.com/sindresorhus/gulp-ruby-sass
-// Definitions by: Agnislav Onufrijchuk <https://github.com/agnislav>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 /// <reference types="node"/>
-
 
 /**
  * The interface includes all options that available for sass executable.
@@ -32,7 +26,7 @@ interface SassOptions {
     quiet?: boolean | undefined;
 
     // Actually, there should be a string. However due to ts spec, overriding member should be the same type or a subtype.
-    // http://stackoverflow.com/questions/19605557/incompatible-static-properties-in-three-d-ts-with-latest-typescript
+    // https://stackoverflow.com/questions/19605557/incompatible-static-properties-in-three-d-ts-with-latest-typescript
     // We need Options.soucemap to be boolean, so here 'any' is used instead of string.
     sourcemap?: any;
 
@@ -48,7 +42,6 @@ interface SassOptions {
  * The interface includes the node-ruby-sass only options.
  * Attention: sourcemap option type differs from the same SassOption's type.
  * @interface Options
- * @extends SassOptions
  */
 interface Options extends SassOptions {
     verbose?: boolean | undefined;
@@ -64,6 +57,6 @@ interface Options extends SassOptions {
  */
 declare function sass(source: string, options?: Options): NodeJS.ReadableStream;
 
-declare namespace sass { }
+declare namespace sass {}
 
 export = sass;

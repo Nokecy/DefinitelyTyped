@@ -1,3 +1,3 @@
 // No tests required for generated types
-// Synced from: https://github.com/googlemaps/js-types/commit/ec4b3550e23a7e4e9bb9b510eded790de976c123
+// Synced from: https://github.com/googlemaps/js-types/commit/955a157be905d45759637e887a8697aedd9abb45
 google.maps.Map;

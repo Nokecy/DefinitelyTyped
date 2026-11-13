@@ -1,24 +1,36 @@
-/**
- * Namespace: browser.cookies
- * Generated from Mozilla sources. Do not manually edit!
- *
- * Use the <code>browser.cookies</code> API to query and modify cookies, and to be notified when they change.
- * Permissions: "cookies"
- *
- * Comments found in source JSON schema files:
- * Copyright (c) 2012 The Chromium Authors. All rights reserved.
- * Use of this source code is governed by a BSD-style license that can be
- * found in the LICENSE file.
- */
+//////////////////////////////////////////////////////
+// BEWARE: DO NOT EDIT MANUALLY! Changes will be lost!
+//////////////////////////////////////////////////////
+
 import { Events } from "./events";
 
+/**
+ * Namespace: browser.cookies
+ */
 export namespace Cookies {
     /**
      * A cookie's 'SameSite' state (https://tools.ietf.org/html/draft-west-first-party-cookies).
      * 'no_restriction' corresponds to a cookie set without a 'SameSite' attribute, 'lax' to 'SameSite=Lax',
      * and 'strict' to 'SameSite=Strict'.
      */
-    type SameSiteStatus = "no_restriction" | "lax" | "strict";
+    type SameSiteStatus = "unspecified" | "no_restriction" | "lax" | "strict";
+
+    /**
+     * The description of the storage partition of a cookie. This object may be omitted (null) if a cookie is not partitioned.
+     */
+    interface PartitionKey {
+        /**
+         * The first-party URL of the cookie, if the cookie is in storage partitioned by the top-level site.
+         * Optional.
+         */
+        topLevelSite?: string;
+
+        /**
+         * Whether or not the cookie is in a third-party context, respecting ancestor chains.
+         * Optional.
+         */
+        hasCrossSiteAncestor?: boolean;
+    }
 
     /**
      * Represents information about an HTTP cookie.
@@ -84,6 +96,12 @@ export namespace Cookies {
          * The first-party domain of the cookie.
          */
         firstPartyDomain: string;
+
+        /**
+         * The cookie's storage partition, if any. null if not partitioned.
+         * Optional.
+         */
+        partitionKey?: PartitionKey;
     }
 
     /**
@@ -146,6 +164,13 @@ export namespace Cookies {
          * Optional.
          */
         firstPartyDomain?: string;
+
+        /**
+         * The storage partition, if the cookie is part of partitioned storage. By default, only non-partitioned cookies are
+         * returned.
+         * Optional.
+         */
+        partitionKey?: PartitionKey;
     }
 
     /**
@@ -201,6 +226,15 @@ export namespace Cookies {
          * Optional.
          */
         firstPartyDomain?: string | null;
+
+        /**
+         * Selects a specific storage partition to look up cookies. Defaults to null, in which case only non-partitioned cookies
+         * are retrieved. If an object iis passed, partitioned cookies are also included, and filtered based on the keys present in
+         * the given PartitionKey description. An empty object ({}) returns all cookies (partitioned + unpartitioned),
+         * a non-empty object (e.g. {topLevelSite: '...'}) only returns cookies whose partition match all given attributes.
+         * Optional.
+         */
+        partitionKey?: PartitionKey;
     }
 
     /**
@@ -274,6 +308,12 @@ export namespace Cookies {
          * Optional.
          */
         firstPartyDomain?: string;
+
+        /**
+         * The storage partition, if the cookie is part of partitioned storage. By default, non-partitioned storage is used.
+         * Optional.
+         */
+        partitionKey?: PartitionKey;
     }
 
     /**
@@ -303,6 +343,12 @@ export namespace Cookies {
          * Optional.
          */
         firstPartyDomain?: string;
+
+        /**
+         * The storage partition, if the cookie is part of partitioned storage. By default, non-partitioned storage is used.
+         * Optional.
+         */
+        partitionKey?: PartitionKey;
     }
 
     /**
@@ -329,6 +375,12 @@ export namespace Cookies {
          * The first-party domain associated with the cookie that's been removed.
          */
         firstPartyDomain: string;
+
+        /**
+         * The storage partition, if the cookie is part of partitioned storage. null if not partitioned.
+         * Optional.
+         */
+        partitionKey?: PartitionKey;
     }
 
     interface OnChangedChangeInfoType {
@@ -356,7 +408,7 @@ export namespace Cookies {
          *
          * @param details Details to identify the cookie being retrieved.
          */
-        get(details: GetDetailsType): Promise<Cookie>;
+        get(details: GetDetailsType): Promise<Cookie | null>;
 
         /**
          * Retrieves all cookies from a single cookie store that match the given information.  The cookies returned will be sorted,
@@ -379,7 +431,7 @@ export namespace Cookies {
          *
          * @param details Information to identify the cookie to remove.
          */
-        remove(details: RemoveDetailsType): Promise<RemoveCallbackDetailsType>;
+        remove(details: RemoveDetailsType): Promise<RemoveCallbackDetailsType | null>;
 
         /**
          * Lists all existing cookie stores.
@@ -391,8 +443,6 @@ export namespace Cookies {
          * two step process: the cookie to be updated is first removed entirely, generating a notification with "cause" of
          * "overwrite" .  Afterwards, a new cookie is written with the updated values, generating a second notification with
          * "cause" "explicit".
-         *
-         * @param changeInfo
          */
         onChanged: Events.Event<(changeInfo: OnChangedChangeInfoType) => void>;
     }

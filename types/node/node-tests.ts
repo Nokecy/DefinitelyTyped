@@ -1,62 +1,51 @@
-import './ts3.6/node-tests';
-import './test/buffer';
-import './test/querystring';
-import './test/url';
-
-import assert = require('node:assert');
-
-assert(true, "it's working");
-
-assert.ok(true, 'inner functions work as well');
-
-assert.throws(() => {});
-assert.throws(() => {}, /Regex test/);
-assert.throws(
-    () => {},
-    () => {},
-    'works wonderfully',
-);
-
-assert['fail'](true, true, 'works like a charm');
-
-{
-    const a = null as any;
-    assert.ifError(a);
-    a; // $ExpectType null | undefined
-}
-
-{
-    const a = true as boolean;
-    assert(a);
-    a; // $ExpectType true
-}
-
-{
-    const a = 13 as number | null | undefined;
-    assert(a);
-    a; // $ExpectType number
-}
-
-{
-    const a = true as boolean;
-    assert.ok(a);
-    a; // $ExpectType true
-}
-
-{
-    const a = 13 as number | null | undefined;
-    assert.ok(a);
-    a; // $ExpectType number
-}
-
-{
-    const a = 'test' as any;
-    assert.strictEqual(a, 'test');
-    a; // $ExpectType string
-}
-
-{
-    const a = { b: 2 } as any;
-    assert.deepStrictEqual(a, { b: 2 });
-    a; // $ExpectType { b: number; }
-}
+import "./node-tests/assert";
+import "./node-tests/async_hooks";
+import "./node-tests/buffer";
+import "./node-tests/child_process";
+import "./node-tests/cluster";
+import "./node-tests/console";
+import "./node-tests/constants";
+import "./node-tests/crypto";
+import "./node-tests/dgram";
+import "./node-tests/diagnostics_channel";
+import "./node-tests/dns";
+import "./node-tests/events";
+import "./node-tests/events-maps";
+import "./node-tests/ffi";
+import "./node-tests/fs";
+import "./node-tests/globals";
+import "./node-tests/http";
+import "./node-tests/http2";
+import "./node-tests/https";
+import "./node-tests/inspector";
+import "./node-tests/module";
+import "./node-tests/net";
+import "./node-tests/os";
+import "./node-tests/path";
+import "./node-tests/perf_hooks";
+import "./node-tests/process";
+import "./node-tests/quic";
+import "./node-tests/querystring";
+import "./node-tests/readline";
+import "./node-tests/repl";
+import "./node-tests/sea";
+import "./node-tests/sqlite";
+import "./node-tests/stream";
+import "./node-tests/stream-iter";
+import "./node-tests/stream-web";
+import "./node-tests/string_decoder";
+import "./node-tests/test";
+import "./node-tests/timers_promises";
+import "./node-tests/timers";
+import "./node-tests/tls";
+import "./node-tests/trace_events";
+import "./node-tests/tty";
+import "./node-tests/url";
+import "./node-tests/util_types";
+import "./node-tests/util";
+import "./node-tests/v8";
+import "./node-tests/vfs";
+import "./node-tests/vm";
+import "./node-tests/wasi";
+import "./node-tests/worker_threads";
+import "./node-tests/zlib";

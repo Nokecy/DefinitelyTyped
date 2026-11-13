@@ -1,17 +1,13 @@
-// Type definitions for connect-busboy 0.0
-// Project: https://github.com/mscdex/connect-busboy
-// Definitions by: Pinguet62 <https://github.com/pinguet62>
-//                 Chris Gedrim <https://github.com/chrisgedrim>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.3
+/// <reference types="node" />
 
-import * as busboy from 'busboy';
-import { RequestHandler } from 'express';
+import { Busboy, BusboyConfig } from "busboy";
+import { RequestHandler } from "express";
+import * as http from "http";
 
 declare function connectBusboy(options?: connectBusboy.ConnectBusboyOptions): RequestHandler;
 
 declare namespace connectBusboy {
-    interface ConnectBusboyOptions extends busboy.BusboyConfig {
+    interface ConnectBusboyOptions extends BusboyConfig {
         immediate?: boolean | undefined;
     }
 }
@@ -19,7 +15,7 @@ declare namespace connectBusboy {
 declare global {
     namespace Express {
         interface Request {
-            busboy: busboy.Busboy;
+            busboy: Busboy;
         }
     }
 }

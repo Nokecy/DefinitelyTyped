@@ -1,22 +1,45 @@
-import { Light } from './../lights/Light';
-import { Color } from './../math/Color';
-import { Matrix4 } from './../math/Matrix4';
-import { Object3D } from './../core/Object3D';
-import { LineSegments } from '../objects/LineSegments';
+import { Object3D } from "../core/Object3D.js";
+import { SpotLight } from "../lights/SpotLight.js";
+import { ColorRepresentation } from "../math/Color.js";
+import { LineSegments } from "../objects/LineSegments.js";
 
+/**
+ * This displays a cone shaped helper object for a {@link SpotLight}.
+ *
+ * When the spot light or its target are transformed or light properties are
+ * changed, it's necessary to call the `update()` method of the respective helper.
+ *
+ * ```js
+ * const spotLight = new THREE.SpotLight( 0xffffff );
+ * spotLight.position.set( 10, 10, 10 );
+ * scene.add( spotLight );
+ *
+ * const spotLightHelper = new THREE.SpotLightHelper( spotLight );
+ * scene.add( spotLightHelper );
+ * ```
+ */
 export class SpotLightHelper extends Object3D {
-    constructor(light: Light, color?: Color | string | number);
-
-    light: Light;
-    matrix: Matrix4;
-
     /**
-     * @default false
+     * Constructs a new spot light helper.
+     *
+     * @param {HemisphereLight} light - The light to be visualized.
+     * @param {number|Color|string} [color] - The helper's color. If not set, the helper will take
+     * the color of the light.
      */
-    matrixAutoUpdate: boolean;
-    color: Color | string | number | undefined;
+    constructor(light: SpotLight, color?: ColorRepresentation);
+    /**
+     * The light being visualized.
+     */
+    light: SpotLight;
+    /**
+     * The color parameter passed in the constructor.
+     * If not set, the helper will take the color of the light.
+     */
+    color: ColorRepresentation | undefined;
     cone: LineSegments;
-
-    dispose(): void;
+    /**
+     * Updates the helper to match the position and direction of the
+     * light being visualized.
+     */
     update(): void;
 }

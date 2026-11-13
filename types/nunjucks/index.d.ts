@@ -1,14 +1,4 @@
-// Type definitions for nunjucks 3.1
-// Project: http://mozilla.github.io/nunjucks/, https://github.com/mozilla/nunjucks
-// Definitions by: Ruben Slabbert <https://github.com/RubenSlabbert>
-//                 Matthew Burstein <https://github.com/MatthewBurstein>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.2
-
-export type TemplateCallback<T> = (
-  err: lib.TemplateError | null,
-  res: T | null,
-) => void;
+export type TemplateCallback<T> = (err: lib.TemplateError | null, res: T | null) => void;
 export type Callback<E, T> = (err: E | null, res: T | null) => void;
 
 export function render(name: string, context?: object): string;
@@ -29,11 +19,11 @@ export interface PrecompileOptions {
     env?: Environment | undefined;
     include?: string[] | undefined;
     exclude?: string[] | undefined;
-    wrapper?(templates: { name: string, template: string }, opts: PrecompileOptions): string;
+    wrapper?(templates: { name: string; template: string }, opts: PrecompileOptions): string;
 }
 
 export class Template {
-    constructor(src: string, env?: Environment, eagerCompile?: boolean);
+    constructor(src: string, env?: Environment, path?: string, eagerCompile?: boolean);
     render(context?: object): string;
     render(context?: object, callback?: TemplateCallback<string>): void;
 }
@@ -48,19 +38,24 @@ export interface ConfigureOptions {
     lstripBlocks?: boolean | undefined;
     watch?: boolean | undefined;
     noCache?: boolean | undefined;
-    web?: {
-        useCache?: boolean | undefined,
-        async?: boolean | undefined
-    } | undefined;
+    dev?: boolean | undefined;
+    web?:
+        | {
+            useCache?: boolean | undefined;
+            async?: boolean | undefined;
+        }
+        | undefined;
     express?: object | undefined;
-    tags?: {
-        blockStart?: string | undefined,
-        blockEnd?: string | undefined,
-        variableStart?: string | undefined,
-        variableEnd?: string | undefined,
-        commentStart?: string | undefined,
-        commentEnd?: string | undefined
-    } | undefined;
+    tags?:
+        | {
+            blockStart?: string | undefined;
+            blockEnd?: string | undefined;
+            variableStart?: string | undefined;
+            variableEnd?: string | undefined;
+            commentStart?: string | undefined;
+            commentEnd?: string | undefined;
+        }
+        | undefined;
 }
 
 export class Environment {
@@ -68,7 +63,7 @@ export class Environment {
         autoescape: boolean;
     };
 
-    constructor(loader?: ILoader | ILoader[] | null, opts?: ConfigureOptions);
+    constructor(loader?: ILoaderAny | ILoaderAny[] | null, opts?: ConfigureOptions);
     render(name: string, context?: object): string;
     render(name: string, context?: object, callback?: TemplateCallback<string>): void;
 
@@ -90,6 +85,11 @@ export class Environment {
     getTemplate(name: string, eagerCompile?: boolean, callback?: Callback<Error, Template>): void;
 
     express(app: object): void;
+
+    on(
+        event: "load",
+        fn: (name: string, source: { src: string; path: string; noCache: boolean }, loader: Loader) => void,
+    ): void;
 }
 
 export interface Extension {
@@ -100,10 +100,23 @@ export interface Extension {
 
 export function installJinjaCompat(): void;
 
+/** A synchronous or an asynchronous loader. */
+export type ILoaderAny = ILoader | ILoaderAsync | WebLoader;
+// WebLoader is part of the union because it can be both sync or async depending
+// on its constructor arguments, which possibly could only be known on runtime.
+
+/** A synchronous loader. */
 export interface ILoader {
-    async?: boolean | undefined;
-    getSource(name: string): LoaderSource;
-    getSource(name: string, callback: Callback<Error, LoaderSource>): void;
+    async?: false | undefined;
+
+    getSource: (name: string) => LoaderSource;
+}
+
+/** An asynchronous loader. */
+export interface ILoaderAsync {
+    async: true;
+
+    getSource: (name: string, callback: Callback<Error, LoaderSource>) => void;
 }
 
 // Needs both Loader and ILoader since nunjucks uses a custom object system
@@ -113,7 +126,7 @@ export class Loader {
     emit(name: string, ...args: any[]): void;
     resolve(from: string, to: string): string;
     isRelative(filename: string): boolean;
-    static extend<LoaderClass extends typeof Loader>(this: LoaderClass, toExtend: ILoader): LoaderClass;
+    static extend<LoaderClass extends typeof Loader>(this: LoaderClass, toExtend: ILoaderAny): LoaderClass;
 }
 
 export interface LoaderSource {
@@ -122,27 +135,41 @@ export interface LoaderSource {
     noCache: boolean;
 }
 
-export interface FileSystemLoaderOptions {
+export interface LoaderOptions {
     /** if true, the system will automatically update templates when they are changed on the filesystem */
-    watch?: boolean | undefined;
+    watch?: boolean;
 
     /**  if true, the system will avoid using a cache and templates will be recompiled every single time */
-    noCache?: boolean | undefined;
+    noCache?: boolean;
 }
+
+export type FileSystemLoaderOptions = LoaderOptions;
+export type NodeResolveLoaderOptions = LoaderOptions;
 
 export class FileSystemLoader extends Loader implements ILoader {
-    init(searchPaths: string[], opts: any): void;
-    getSource(name: string): LoaderSource;
     constructor(searchPaths?: string | string[], opts?: FileSystemLoaderOptions);
+    getSource(name: string): LoaderSource;
 }
 
-export class WebLoader extends Loader implements ILoader {
-    constructor(baseUrl: string, opts?: any);
+export class NodeResolveLoader extends Loader implements ILoader {
+    constructor(searchPaths?: string | string[], opts?: NodeResolveLoaderOptions);
     getSource(name: string): LoaderSource;
+}
+
+export interface WebLoaderOptions {
+    useCache?: boolean;
+    async?: boolean;
+}
+
+export class WebLoader extends Loader {
+    constructor(baseUrl?: string, opts?: WebLoaderOptions);
+    async: boolean;
+
+    getSource: (name: string, callback: Callback<Error, LoaderSource>) => LoaderSource;
 }
 
 export class PrecompiledLoader extends Loader implements ILoader {
-    init(searchPaths: string[], opts: any): void;
+    constructor(compiledTemplates?: any[]);
     getSource(name: string): LoaderSource;
 }
 

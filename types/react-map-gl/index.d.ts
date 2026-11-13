@@ -1,24 +1,11 @@
-// Type definitions for react-map-gl 5.2
-// Project: https://github.com/visgl/react-map-gl#readme
-// Definitions by: Robert Imig <https://github.com/rimig>
-//                 Fabio Berta <https://github.com/fnberta>
-//                 Sander Siim <https://github.com/sandersiim>
-//                 Otto Urpelainen <https://github.com/oturpe>
-//                 Arman Safikhani <https://github.com/Arman92>
-//                 William Chiu <https://github.com/chiuhow>
-//                 David Baumgold <https://github.com/singingwolfboy>
-//                 Ilja Reznik <https://github.com/ireznik>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 3.4
-
 /// <reference lib='dom' />
 
-import * as React from 'react';
-import * as MapboxGL from 'mapbox-gl';
-import * as GeoJSON from 'geojson';
-import WebMercatorViewport from 'viewport-mercator-project';
+import * as GeoJSON from "geojson";
+import * as MapboxGL from "mapbox-gl";
+import * as React from "react";
+import WebMercatorViewport from "viewport-mercator-project";
 
-export { WebMercatorViewport } from 'viewport-mercator-project';
+export { WebMercatorViewport } from "viewport-mercator-project";
 
 export interface ViewState {
     latitude: number;
@@ -128,8 +115,8 @@ export interface MapControllerOptions {
 }
 
 export interface ViewportProps {
-    width: number;
-    height: number;
+    width: number | string;
+    height: number | string;
     latitude: number;
     longitude: number;
     zoom: number;
@@ -140,7 +127,7 @@ export interface ViewportProps {
     minZoom: number;
     maxPitch: number;
     minPitch: number;
-    transitionDuration?: number | 'auto' | undefined;
+    transitionDuration?: number | "auto" | undefined;
     transitionInterpolator?: TransitionInterpolator | undefined;
     transitionInterruption?: TRANSITION_EVENTS | undefined;
     transitionEasing?: EasingFunction | undefined;
@@ -264,6 +251,7 @@ export type ViewStateChangeHandler = (info: ViewStateChangeInfo) => void;
 export type ContextViewStateChangeHandler = (info: ContextViewStateChangeInfo) => void;
 
 export interface InteractiveMapProps extends StaticMapProps {
+    children?: React.ReactNode;
     maxZoom?: number | undefined;
     minZoom?: number | undefined;
     maxPitch?: number | undefined;
@@ -271,7 +259,7 @@ export interface InteractiveMapProps extends StaticMapProps {
     onViewStateChange?: ContextViewStateChangeHandler | undefined;
     onViewportChange?: ContextViewportChangeHandler | undefined;
     onInteractionStateChange?: ((state: ExtraState) => void) | undefined;
-    transitionDuration?: number | 'auto' | undefined;
+    transitionDuration?: number | "auto" | undefined;
     transitionInterpolator?: TransitionInterpolator | undefined;
     transitionInterruption?: TRANSITION_EVENTS | undefined;
     transitionEasing?: EasingFunction | undefined;
@@ -340,7 +328,7 @@ export interface BaseControlProps {
 }
 
 export class BaseControl<T extends BaseControlProps, S extends Element> extends React.PureComponent<T> {
-    _containerRef: React.RefObject<S>;
+    _containerRef: React.RefObject<S | null>;
     _context: MapContextProps;
 }
 
@@ -358,6 +346,7 @@ export interface PopupProps extends BaseControlProps {
     dynamicPosition?: boolean | undefined;
     sortByDepth?: boolean | undefined;
     onClose?: (() => void) | undefined;
+    children?: React.ReactNode | undefined;
 }
 
 export class Popup extends BaseControl<PopupProps, HTMLDivElement> {}
@@ -407,7 +396,7 @@ export class GeolocateControl extends BaseControl<GeolocateControlProps, HTMLDiv
 
 export interface ScaleControlProps extends BaseControlProps {
     maxWidth?: number | undefined;
-    unit?: 'imperial' | 'metric' | 'nautical' | undefined;
+    unit?: "imperial" | "metric" | "nautical" | undefined;
 }
 
 export class ScaleControl extends BaseControl<ScaleControlProps, HTMLDivElement> {}
@@ -432,6 +421,7 @@ export interface MarkerProps extends DraggableControlProps {
     latitude: number;
     offsetLeft?: number | undefined;
     offsetTop?: number | undefined;
+    children?: React.ReactNode | undefined;
 }
 
 export class Marker extends DraggableControl<MarkerProps> {}
@@ -476,11 +466,11 @@ export interface SourceProps {
     tiles?: string[] | undefined;
     tileSize?: number | undefined;
     bounds?: number[] | undefined;
-    scheme?: 'xyz' | 'tms' | undefined;
+    scheme?: "xyz" | "tms" | undefined;
     minzoom?: number | undefined;
     maxzoom?: number | undefined;
     attribution?: string | undefined;
-    encoding?: 'terrarium' | 'mapbox' | undefined;
+    encoding?: "terrarium" | "mapbox" | undefined;
     data?: GeoJSON.Feature<GeoJSON.Geometry> | GeoJSON.FeatureCollection<GeoJSON.Geometry> | string | undefined;
     buffer?: number | undefined;
     tolerance?: number | undefined;

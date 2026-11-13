@@ -1,14 +1,9 @@
-// Type definitions for npm 2.0.0
-// Project: https://github.com/npm/npm
-// Definitions by: Maxime LUCE <https://github.com/SomaticIT>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 /// <reference types="node" />
 
-declare var npm: NPM.Static;
+declare var npm: npm.Static;
 export = npm;
 
-declare namespace NPM {
+declare namespace npm {
     export interface Static extends NodeJS.EventEmitter {
         config: Config;
         commands: Commands;
@@ -26,15 +21,12 @@ declare namespace NPM {
         cache: string;
         tmp: string;
 
-
-        load(cli: ConfigOptions): void;
-        load(callback: SimpleCallback<Config>): void;
-        load(cli: ConfigOptions, callback: SimpleCallback<Config>): void;
+        load(callback?: SimpleCallback<void>): Promise<void>;
 
         deref(command: string): string;
     }
 
-    //#region Commands Interfaces
+    // #region Commands Interfaces
 
     export interface Commands {
         install: CommandFunction;
@@ -49,6 +41,45 @@ declare namespace NPM {
         submodule: CommandFunction;
         pack: CommandFunction;
         dedupe: CommandFunction;
+
+        /** https://docs.npmjs.com/cli/v7/commands/npm-access */
+        access: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-audit */
+        audit: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-ci */
+        ci: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-diff */
+        diff: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-dist-tag */
+        "dist-tag": CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-doctor */
+        doctor: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-exec */
+        exec: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-explain */
+        explain: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-fund */
+        fund: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-hook */
+        hook: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-install-ci-test */
+        "install-ci-test": CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-install-test */
+        "install-test": CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-logout */
+        logout: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-org */
+        org: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-ping */
+        ping: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-profile */
+        profile: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-set-script */
+        "set-script": CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-team */
+        team: CommandFunction;
+        /** https://docs.npmjs.com/cli/v7/commands/npm-token */
+        token: CommandFunction;
 
         rebuild: CommandFunction;
         link: CommandFunction;
@@ -97,35 +128,64 @@ declare namespace NPM {
         "run-script": CommandFunction;
         completion: CommandFunction;
 
-        //Aliases
-        rm: CommandFunction;               // uninstall
-        r: CommandFunction;                // uninstall
-        un: CommandFunction;               // uninstall
-        unlink: CommandFunction;           // uninstall
-        remove: CommandFunction;           // uninstall
-        rb: CommandFunction;               // rebuild
-        list: CommandFunction;             // ls
-        la: CommandFunction;               // ls
-        ll: CommandFunction;               // ls
-        i: CommandFunction;                // install
-        isntall: CommandFunction;          // install
-        up: CommandFunction;               // update
-        c: CommandFunction;                // config
-        find: CommandFunction;             // search
-        s: CommandFunction;                // search
-        se: CommandFunction;               // search
-        author: CommandFunction;           // owner
-        home: CommandFunction;             // docs
-        issues: CommandFunction;           // bugs
-        unstar: CommandFunction;           // star
-        apihelp: CommandFunction;          // help
-        long: CommandFunction;             // adduser
-        "add-user": CommandFunction;       // adduser
-        tst: CommandFunction;              // test
-        t: CommandFunction;                // test
-        "find-dupes": CommandFunction;     // dedupe
-        ddp: CommandFunction;              // dedupe
-
+        // Aliases
+        rm: CommandFunction; // uninstall
+        r: CommandFunction; // uninstall
+        un: CommandFunction; // uninstall
+        unlink: CommandFunction; // uninstall
+        remove: CommandFunction; // uninstall
+        rb: CommandFunction; // rebuild
+        list: CommandFunction; // ls
+        la: CommandFunction; // ls
+        ll: CommandFunction; // ls
+        i: CommandFunction; // install
+        isntall: CommandFunction; // install
+        up: CommandFunction; // update
+        c: CommandFunction; // config
+        find: CommandFunction; // search
+        s: CommandFunction; // search
+        se: CommandFunction; // search
+        author: CommandFunction; // owner
+        home: CommandFunction; // docs
+        issues: CommandFunction; // bugs
+        unstar: CommandFunction; // star
+        apihelp: CommandFunction; // help
+        long: CommandFunction; // adduser
+        "add-user": CommandFunction; // adduser
+        tst: CommandFunction; // test
+        t: CommandFunction; // test
+        "find-dupes": CommandFunction; // dedupe
+        ddp: CommandFunction; // dedupe
+        /**
+         * Alias for `dist-tag`
+         *
+         * https://docs.npmjs.com/cli/v7/commands/npm-dist-tag
+         */
+        "dist-tags": CommandFunction;
+        /**
+         * Alias for `exec`
+         *
+         * https://docs.npmjs.com/cli/v7/commands/npm-exec
+         */
+        x: CommandFunction;
+        /**
+         * Alias for `explain`
+         *
+         * https://docs.npmjs.com/cli/v7/commands/npm-dist-tag
+         */
+        why: CommandFunction;
+        /**
+         * Alias for `install-ci-test`
+         *
+         * https://docs.npmjs.com/cli/v7/commands/npm-install-ci-test
+         */
+        cit: CommandFunction;
+        /**
+         * Alias for `install-test`
+         *
+         * https://docs.npmjs.com/cli/v7/commands/npm-install-test
+         */
+        it: CommandFunction;
 
         // plumbing
         build: CommandFunction;
@@ -133,7 +193,6 @@ declare namespace NPM {
         xmas: CommandFunction;
         substack: CommandFunction;
         visnup: CommandFunction;
-
     }
     export interface CommandFunction {
         (args: string[], callback: CommandCallback): void;
@@ -142,9 +201,9 @@ declare namespace NPM {
         (err?: Error, result?: any, result2?: any, result3?: any, result4?: any): void;
     }
 
-    //#endregion
+    // #endregion
 
-    //#region Other Interfaces
+    // #region Other Interfaces
 
     export interface Spinner {
         int: string;
@@ -153,12 +212,12 @@ declare namespace NPM {
         stop(): void;
     }
 
-    //#endregion
+    // #endregion
 
-    //#region Config Interfaces
+    // #region Config Interfaces
 
     export interface ConfigStatic {
-        new (base: Config): Config;
+        new(base: Config): Config;
         (base: Config): Config;
     }
 
@@ -443,9 +502,9 @@ declare namespace NPM {
         auth?: string | undefined;
     }
 
-    //#endregion
+    // #endregion
 
-    //#region Utilities Interfaces
+    // #region Utilities Interfaces
 
     export interface Dictionary<T> {
         [key: string]: T;
@@ -459,5 +518,5 @@ declare namespace NPM {
         (err?: Error, result?: T): void;
     }
 
-    //#endregion
+    // #endregion
 }

@@ -1,12 +1,3 @@
-// Type definitions for react-native-push-notification 7.3
-// Project: https://github.com/zo0r/react-native-push-notification#readme
-// Definitions by: Paito Anderson <https://github.com/PaitoAnderson>
-//                 Tom Sawkins <https://github.com/tomSawkins>
-//                 Andrew Li <https://github.com/Li357>
-//                 Clément Rucheton <https://github.com/rucheton>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 3.5
-
 export interface PushNotificationPermissions {
     alert?: boolean | undefined;
     badge?: boolean | undefined;
@@ -23,7 +14,7 @@ export interface ReceivedNotification {
     badge: number;
     alert: object;
     sound: string;
-    id: number;
+    id: string;
     action?: string | undefined;
     finish: (fetchResult: string) => void;
 }
@@ -80,9 +71,10 @@ export class PushNotificationObject {
     category?: any;
 
     /* iOS and Android properties */
-    id?: number | undefined;
+    id?: string | number | undefined;
     title?: string | undefined;
     message: string;
+    picture?: string | undefined;
     userInfo?: any;
     playSound?: boolean | undefined;
     soundName?: string | undefined;
@@ -107,10 +99,10 @@ export class PushNotificationDeliveredObject {
 }
 
 export class PushNotificationScheduledLocalObject {
-    id: number;
+    id: string;
     date: Date;
     title: string;
-    body: string;
+    message: string;
     soundName: string;
     repeatInterval: number;
     number: number;
@@ -146,7 +138,12 @@ export interface PushNotification {
     unsubscribeFromTopic(topic: string): void;
     presentLocalNotification(notification: PushNotificationObject): void;
     scheduleLocalNotification(notification: PushNotificationScheduleObject): void;
+
+    /**
+     * @deprecated use cancelLocalNotification method
+     */
     cancelLocalNotifications(details: { id: string }): void;
+    cancelLocalNotification(notificationId: string): void;
     clearLocalNotification(tag: string, notificationID: number): void;
     cancelAllLocalNotifications(): void;
     setApplicationIconBadgeNumber(badgeCount: number): void;

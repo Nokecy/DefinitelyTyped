@@ -1,8 +1,8 @@
-import { Connection } from './client';
+import { Connection } from "./client";
 
 export type JSONValue = string | number | boolean | null | JSONObject | JSONArray;
 export interface JSONObject {
-  [name: string]: JSONValue;
+    [name: string]: JSONValue;
 }
 export interface JSONArray extends Array<JSONValue> {}
 
@@ -13,14 +13,15 @@ export type DocumentID = string;
 export type RequestQuery = any;
 export type BulkRequestData = IDString[] | Record<IDString, any>;
 
-export type Path = ReadonlyArray<string|number>;
+export type Path = ReadonlyArray<string | number>;
 export interface Snapshot<T = any> {
     id: IDString;
     v: VersionNumber;
     type: string | null;
-    data?: T | undefined;
+    data?: T;
     m: SnapshotMeta | null;
 }
+export type IngestibleSnapshot<T = any> = Pick<Snapshot<T>, "v" | "type" | "data">;
 
 export interface SnapshotMeta {
     ctime: number;
@@ -29,23 +30,70 @@ export interface SnapshotMeta {
     [key: string]: any;
 }
 
-export interface AddNumOp { p: Path; na: number; }
+export interface AddNumOp {
+    p: Path;
+    na: number;
+}
 
-export interface ListInsertOp  { p: Path; li: any; }
-export interface ListDeleteOp  { p: Path; ld: any; }
-export interface ListReplaceOp { p: Path; li: any; ld: any; }
-export interface ListMoveOp    { p: Path; lm: any; }
+export interface ListInsertOp {
+    p: Path;
+    li: any;
+}
+export interface ListDeleteOp {
+    p: Path;
+    ld: any;
+}
+export interface ListReplaceOp {
+    p: Path;
+    li: any;
+    ld: any;
+}
+export interface ListMoveOp {
+    p: Path;
+    lm: any;
+}
 
-export interface ObjectInsertOp  { p: Path; oi: any; }
-export interface ObjectDeleteOp  { p: Path; od: any; }
-export interface ObjectReplaceOp { p: Path; oi: any; od: any; }
+export interface ObjectInsertOp {
+    p: Path;
+    oi: any;
+}
+export interface ObjectDeleteOp {
+    p: Path;
+    od: any;
+}
+export interface ObjectReplaceOp {
+    p: Path;
+    oi: any;
+    od: any;
+}
 
-export interface StringInsertOp { p: Path; si: string; }
-export interface StringDeleteOp { p: Path; sd: string; }
+export interface StringInsertOp {
+    p: Path;
+    si: string;
+}
+export interface StringDeleteOp {
+    p: Path;
+    sd: string;
+}
 
-export interface SubtypeOp { p: Path; t: string; o: any; }
+export interface SubtypeOp {
+    p: Path;
+    t: string;
+    o: any;
+}
 
-export type Op = AddNumOp | ListInsertOp | ListDeleteOp | ListReplaceOp | ListMoveOp | ObjectInsertOp | ObjectDeleteOp | ObjectReplaceOp | StringInsertOp | StringDeleteOp | SubtypeOp;
+export type Op =
+    | AddNumOp
+    | ListInsertOp
+    | ListDeleteOp
+    | ListReplaceOp
+    | ListMoveOp
+    | ObjectInsertOp
+    | ObjectDeleteOp
+    | ObjectReplaceOp
+    | StringInsertOp
+    | StringDeleteOp
+    | SubtypeOp;
 
 export interface RawOp {
     src: string;
@@ -56,49 +104,62 @@ export interface RawOp {
     d: DocumentID;
 }
 
-export type CreateOp = RawOp & { create: { type: string; data: any }; del: undefined; op: undefined; };
-export type DeleteOp = RawOp & { del: boolean; create: undefined; op: undefined; };
-export type EditOp = RawOp & { op: any[]; create: undefined; del: undefined; };
+export type CreateOp = Partial<RawOp> & { create: { type: string; data: any } };
+export type DeleteOp = Partial<RawOp> & { del: boolean };
+export type EditOp = Partial<RawOp> & { op: any };
 
-export type OTType = 'ot-text' | 'ot-json0' | 'ot-json1' | 'ot-text-tp2' | 'rich-text';
+export type OTType = "ot-text" | "ot-json0" | "ot-json1" | "ot-text-tp2" | "rich-text";
 
 export interface Type {
-    name?: string | undefined;
-    uri?: string | undefined;
+    name?: string;
+    uri?: string;
     create(initialData?: any): any;
     apply(snapshot: any, op: any): any;
-    transform(op1: any, op2: any, side: 'left' | 'right'): any;
+    transform(op1: any, op2: any, side: "left" | "right"): any;
     compose(op1: any, op2: any): any;
     invert?(op: any): any;
     normalize?(op: any): any;
     transformCursor?(cursor: any, op: any, isOwnOp: boolean): any;
+    transformPresence?<T>(presence: T, op: any, isOwnOp: boolean): T;
     serialize?(snapshot: any): any;
     deserialize?(data: any): any;
     [key: string]: any;
 }
 export interface Types {
+    defaultType: Type;
     register: (type: Type) => void;
     map: { [key: string]: Type };
 }
 
 export type LoggerFunction = typeof console.log;
 export interface LoggerOverrides {
-    info?: LoggerFunction | undefined;
-    warn?: LoggerFunction | undefined;
-    error?: LoggerFunction | undefined;
+    info?: LoggerFunction;
+    warn?: LoggerFunction;
+    error?: LoggerFunction;
 }
 export class Logger {
     setMethods(overrides: LoggerOverrides): void;
+    info: LoggerFunction;
+    warn: LoggerFunction;
+    error: LoggerFunction;
 }
 
 export interface Error {
     code: number;
     message: string;
 }
-export interface ShareDBSourceOptions { source?: any; }
+export interface ShareDBSourceOptions {
+    source?: any;
+}
 // interface ShareDBCreateOptions extends ShareDBSourceOptions {}
 // interface ShareDBDelOptions extends ShareDBSourceOptions {}
 // interface ShareDBSubmitOpOptions extends ShareDBSourceOptions {}
+export interface BackendFetchOptions {
+    snapshotOptions?: Record<string, unknown>;
+}
+export interface BackendSubmitOptions {
+    [key: string]: unknown;
+}
 
 export type Callback = (err: Error) => any;
 
@@ -120,13 +181,15 @@ export class Doc<T = any> extends TypedEmitter<DocEventMap<T>> {
     subscribe: (callback?: (err: Error) => void) => void;
     unsubscribe: (callback?: (err: Error) => void) => void;
 
-    ingestSnapshot(snapshot: Snapshot<T>, callback?: Callback): void;
+    toSnapshot(): IngestibleSnapshot<T>;
+    ingestSnapshot(snapshot: IngestibleSnapshot<T>, callback?: Callback): void;
     destroy(callback?: Callback): void;
-    create(data: any, callback?: Callback): void;
-    create(data: any, type?: OTType, callback?: Callback): void;
-    create(data: any, type?: OTType, options?: ShareDBSourceOptions, callback?: Callback): void;
+    create(data: T, callback?: Callback): void;
+    create(data: T, type?: string, callback?: Callback): void;
+    create(data: T, type?: string, options?: ShareDBSourceOptions, callback?: Callback): void;
     submitOp(data: any, options?: ShareDBSourceOptions, callback?: Callback): void;
-    del(options: ShareDBSourceOptions, callback?: (err: Error) => void): void;
+    del(callback?: Callback): void;
+    del(options?: ShareDBSourceOptions, callback?: Callback): void;
     whenNothingPending(callback: () => void): void;
     hasPending(): boolean;
     hasWritePending(): boolean;
@@ -135,23 +198,40 @@ export class Doc<T = any> extends TypedEmitter<DocEventMap<T>> {
     flush(): void;
 }
 
+export type ConnectionState = "connecting" | "connected" | "disconnected" | "stopped" | "closed";
+export type ConnectionStateEventMap = {
+    [state in ConnectionState]: (reason: string) => void;
+};
+export interface ConnectionReceiveRequest {
+    data: any;
+}
+export type ConnectionEventMap = ConnectionStateEventMap & {
+    "connection error": (error: Error) => void;
+    "doc": (doc: Doc) => void;
+    "error": (error: Error) => void;
+    "pong": () => void;
+    "receive": (request: ConnectionReceiveRequest) => void;
+    "send": (message: any) => void;
+    "state": (newState: ConnectionState, reason: string) => void;
+};
+
 export interface DocEventMap<T> {
-    'load': () => void;
-    'no write pending': () => void;
-    'nothing pending': () => void;
-    'create': (source: any) => void;
-    'op': (ops: [any], source: any) => void;
-    'op batch': (ops: any[], source: any) => void;
-    'before op': (ops: [any], source: any) => void;
-    'before op batch': (ops: any[], source: any) => void;
-    'del': (data: T, source: any) => void;
-    'error': (error: Error) => void;
-    'destroy': () => void;
+    "load": () => void;
+    "no write pending": () => void;
+    "nothing pending": () => void;
+    "create": (source: any) => void;
+    "op": (ops: [any], source: any, clientId: string) => void;
+    "op batch": (ops: any[], source: any) => void;
+    "before op": (ops: [any], source: any, clientId: string) => void;
+    "before op batch": (ops: any[], source: any) => void;
+    "del": (data: T, source: any) => void;
+    "error": (error: Error) => void;
+    "destroy": () => void;
 }
 
 export type QueryEvent = keyof QueryEventMap<any>;
 export class Query<T = any> extends TypedEmitter<QueryEventMap<T>> {
-    action: 'qf' | 'qs';
+    action: "qf" | "qs";
     connection: Connection;
     id: string;
     collection: string;
@@ -164,13 +244,13 @@ export class Query<T = any> extends TypedEmitter<QueryEventMap<T>> {
 }
 
 export interface QueryEventMap<T> {
-    'ready': () => void;
-    'error': (error: Error) => void;
-    'insert': (inserted: Array<Doc<T>>, index: number) => void;
-    'remove': (removed: Array<Doc<T>>, index: number) => void;
-    'move': (moved: Array<Doc<T>>, from: number, to: number) => void;
-    'changed': (docs: Array<Doc<T>>) => void;
-    'extra': (extra: any) => void;
+    "ready": () => void;
+    "error": (error: Error) => void;
+    "insert": (inserted: Array<Doc<T>>, index: number) => void;
+    "remove": (removed: Array<Doc<T>>, index: number) => void;
+    "move": (moved: Array<Doc<T>>, from: number, to: number) => void;
+    "changed": (docs: Array<Doc<T>>) => void;
+    "extra": (extra: any) => void;
 }
 
 export type ReceivePresenceListener<T> = (id: string, value: T) => void;
@@ -188,8 +268,8 @@ export class Presence<T = any> extends TypedEmitter<PresenceEventMap<T>> {
 }
 
 export interface PresenceEventMap<T> {
-    'receive': ReceivePresenceListener<T>;
-    'error': (error: Error) => void;
+    "receive": ReceivePresenceListener<T>;
+    "error": (error: Error) => void;
 }
 
 export class LocalPresence<T = any> extends TypedEmitter<LocalPresenceEventMap> {
@@ -204,10 +284,34 @@ export class LocalPresence<T = any> extends TypedEmitter<LocalPresenceEventMap> 
 }
 
 export interface LocalPresenceEventMap {
-    'error': (error: Error) => void;
+    "error": (error: Error) => void;
 }
 
-export type RequestAction = 'qf' | 'qs' | 'qu' | 'bf' | 'bs' | 'bu' | 'f' | 's' | 'u' | 'op' | 'nf' | 'nt';
+export interface RequestActions {
+    initLegacy: "init";
+    handshake: "hs";
+    queryFetch: "qf";
+    querySubscribe: "qs";
+    queryUnsubscribe: "qu";
+    queryUpdate: "q";
+    bulkFetch: "bf";
+    bulkSubscribe: "bs";
+    bulkUnsubscribe: "bu";
+    fetch: "f";
+    fixup: "fixup";
+    subscribe: "s";
+    unsubscribe: "u";
+    op: "op";
+    snapshotFetch: "nf";
+    snapshotFetchByTimestamp: "nt";
+    pingPong: "pp";
+    presence: "p";
+    presenceSubscribe: "ps";
+    presenceUnsubscribe: "pu";
+    presenceRequest: "pr";
+}
+
+export type RequestAction = RequestActions[keyof RequestActions];
 
 export interface ClientRequest {
     /** Short name of the request's action */
@@ -221,24 +325,24 @@ export interface AnyDataObject {
 }
 
 export interface ServerResponseSuccess {
-    a?: RequestAction | undefined;
-    c?: CollectionName | undefined;
-    d?: DocumentID | undefined;
+    a?: RequestAction;
+    c?: CollectionName;
+    d?: DocumentID;
     extra?: any;
-    v?: VersionNumber | undefined;
-    id?: number | undefined;
-    protocol?: number | undefined;
-    protocolMinor?: number | undefined;
-    type?: string | undefined;
-    data?: AnyDataObject | AnyDataObject[] | undefined;
+    v?: VersionNumber;
+    id?: number;
+    protocol?: number;
+    protocolMinor?: number;
+    type?: string;
+    data?: AnyDataObject | AnyDataObject[];
 }
 
 export interface ServerResponseError extends ServerResponseSuccess {
     error: Error;
-    b?: BulkRequestData | undefined;
-    o?: AnyDataObject | undefined;
-    q?: RequestQuery | undefined;
-    r?: Array<[IDString, VersionNumber]> | undefined;
+    b?: BulkRequestData;
+    o?: AnyDataObject;
+    q?: RequestQuery;
+    r?: Array<[IDString, VersionNumber]>;
 }
 
 export interface Socket {

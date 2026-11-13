@@ -1,16 +1,10 @@
-// Type definitions for gulp-help
-// Project: https://github.com/chmontgomery/gulp-help
-// Definitions by: Qubo <https://github.com/tkQubo>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.3
-
 /// <reference types="node" />
 /// <reference types="gulp" />
 /// <reference types="orchestrator" />
 
-import Orchestrator = require('orchestrator');
-import gulp = require('gulp');
-type HelpOption = string|boolean;
+import Orchestrator = require("orchestrator");
+import gulp = require("gulp");
+type HelpOption = string | boolean;
 
 declare namespace gulpHelp {
     interface TaskMethod {
@@ -106,8 +100,11 @@ declare namespace gulpHelp {
          * A function to run after the default help task runs
          */
         afterPrintCallback?: Function | undefined;
+        /**
+         * Object documenting options which can be passed to your task
+         */
+        options?: { [key: string]: string } | undefined;
     }
-
 }
 
 declare function gulpHelp(gulp: gulp.Gulp, options?: gulpHelp.GulpHelpOptions): gulpHelp.GulpHelp;

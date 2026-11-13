@@ -1,13 +1,4 @@
-// Type definitions for react-stickynode 3.0
-// Project: https://github.com/yahoo/react-stickynode
-// Definitions by: Tim Stirrat <https://github.com/tstirrat>
-//                 Kamil Socha <https://github.com/ksocha>
-//                 Mirek Ciastek <https://github.com/mciastek>
-//                 Yanick Dickbauer <https://github.com/yanickdi>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.8
-
-import * as React from 'react';
+import * as React from "react";
 
 export = Sticky;
 
@@ -72,6 +63,12 @@ declare namespace Sticky {
          * Class name to be applied to the inner element ('' by default).
          */
         innerClass?: string | undefined;
+
+        /**
+         * Class name to be applied to the inner element when the sticky
+         * state is active ('' by default).
+         */
+        innerActiveClass?: string | undefined;
 
         /**
          * Class name to be applied to the element independent of the

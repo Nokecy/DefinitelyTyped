@@ -1,13 +1,7 @@
-// Type definitions for jest-dev-server 4.2
-// Project: https://github.com/smooth-code/jest-puppeteer/tree/master/packages/jest-dev-server
-// Definitions by: Ifiok Jr. <https://github.com/ifiokjr>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 2.2
-
 /// <reference types="node" />
 
-import { ChildProcess } from 'child_process';
-import { WaitOnOptions } from 'wait-on';
+import { ChildProcess } from "child_process";
+import { WaitOnOptions } from "wait-on";
 
 export interface JestDevServerOptions {
     /**
@@ -60,6 +54,21 @@ export interface JestDevServerOptions {
     host?: string | undefined;
 
     /**
+     * Path to resource to wait for activity on before considering the server running. Must be used in conjunction with host and port.
+     * @default null
+     *
+     * ```js
+     * module.exports = {
+     *   command: 'npm run start --port 3000',
+     *   host: 'customhost.com',
+     *   port: 3000,
+     *   path: 'thing',
+     * }
+     * ```
+     */
+    path?: string | undefined;
+
+    /**
      * To wait for an HTTP or TCP endpoint before considering the server running, include http or tcp as a protocol. Must be used in conjunction with port.
      * @default 'tcp'
      * ```js
@@ -70,7 +79,7 @@ export interface JestDevServerOptions {
      * }
      * ```
      */
-    protocol?: 'https' | 'http' | 'tcp' | 'socket' | undefined;
+    protocol?: "https" | "http" | "tcp" | "socket" | undefined;
 
     /**
      * Port to wait for activity on before considering the server running. If not provided, the server is assumed to immediately be running.
@@ -101,7 +110,7 @@ export interface JestDevServerOptions {
      *   usedPortAction: 'kill',
      * }
      */
-    usedPortAction?: 'ask' | 'error' | 'ignore' | 'kill' | undefined;
+    usedPortAction?: "ask" | "error" | "ignore" | "kill" | undefined;
 
     /**
      * jest-dev-server uses the wait-on npm package to wait for resources to become available before calling callback.
@@ -120,9 +129,9 @@ export interface JestDevServerOptions {
     waitOnScheme?: Partial<WaitOnOptions> | undefined;
 }
 
-export const ERROR_TIMEOUT: 'ERROR_TIMEOUT';
-export const ERROR_PORT_USED: 'ERROR_PORT_USED';
-export const ERROR_NO_COMMAND: 'ERROR_NO_COMMAND';
+export const ERROR_TIMEOUT: "ERROR_TIMEOUT";
+export const ERROR_PORT_USED: "ERROR_PORT_USED";
+export const ERROR_NO_COMMAND: "ERROR_NO_COMMAND";
 
 export function setup(
     options: JestDevServerOptions | JestDevServerOptions[],

@@ -1,8 +1,3 @@
-// Type definitions for drift-zoom 1.4
-// Project: https://github.com/imgix/drift
-// Definitions by: Piotr Błażejewicz <https://github.com/peterblazejewicz>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-
 export as namespace Drift;
 
 declare class Drift {
@@ -55,6 +50,8 @@ declare namespace Drift {
         touchBoundingBox?: boolean | undefined;
         /** @default document.body */
         boundingBoxContainer?: HTMLElement | undefined;
+        /** @default false */
+        passive?: boolean | undefined;
     }
 }
 
